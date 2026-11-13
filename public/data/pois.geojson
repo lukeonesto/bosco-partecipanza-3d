@@ -1,0 +1,2909 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.23599,
+          45.221455
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-1750855138",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.234044,
+          45.237128
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2486548829",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.23286,
+          45.237411
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2486548878",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232895,
+          45.237775
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2486548961",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232924,
+          45.238753
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2486549067",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232744,
+          45.236466
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548785",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.233238,
+          45.236991
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548786",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.233453,
+          45.237125
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548787",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.233328,
+          45.237133
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548788",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.23338,
+          45.237159
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548789",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232462,
+          45.237291
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548790",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232529,
+          45.237325
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548791",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232603,
+          45.23737
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548792",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.234695,
+          45.23742
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548793",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232621,
+          45.237534
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548794",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232591,
+          45.237575
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548795",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232559,
+          45.237628
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548796",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.231951,
+          45.237714
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548797",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.233887,
+          45.237843
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548798",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.233082,
+          45.238403
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-2503548800",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.253725,
+          45.221087
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-5594803792",
+        "nome": "Rul d' la Costa",
+        "nome_en": "Rul d' la Costa",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Specie: Quercus robur",
+        "descrizione_en": "Species: Quercus robur",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.261594,
+          45.215071
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-6433831397",
+        "nome": "Area Picnic",
+        "nome_en": "Picnic Area",
+        "categoria": "area_sosta",
+        "sottocategoria": "picnic",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260819,
+          45.21646
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-6433838344",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260894,
+          45.222474
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-6442258948",
+        "nome": "Struttura",
+        "nome_en": "Structure",
+        "categoria": "struttura",
+        "sottocategoria": "toilets",
+        "descrizione": "actually locked when discovered on April 2019.",
+        "descrizione_en": "actually locked when discovered on April 2019.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.230488,
+          45.216375
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-6810961447",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.230722,
+          45.219253
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-6810977103",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.259035,
+          45.211906
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233851",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.259058,
+          45.212021
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233852",
+        "nome": "Sentiero Ramezzana",
+        "nome_en": "Sentiero Ramezzana",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.253436,
+          45.212634
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233853",
+        "nome": "Sentiero Ramezzana",
+        "nome_en": "Sentiero Ramezzana",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.253414,
+          45.212742
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233854",
+        "nome": "Sentiero di mezzo Ramezzana",
+        "nome_en": "Sentiero di mezzo Ramezzana",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.261568,
+          45.214932
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233855",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.261955,
+          45.21505
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233856",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260927,
+          45.216362
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233857",
+        "nome": "Sentiero Costa al Sole",
+        "nome_en": "Sentiero Costa al Sole",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.26092,
+          45.216365
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233858",
+        "nome": "Panchina",
+        "nome_en": "Bench",
+        "categoria": "panchina",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260923,
+          45.216353
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233859",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.249508,
+          45.218714
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233860",
+        "nome": "Sentiero Divisioni",
+        "nome_en": "Sentiero Divisioni",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.253739,
+          45.221033
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233861",
+        "nome": "Albero Monumentale",
+        "nome_en": "Albero Monumentale",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260642,
+          45.220734
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233862",
+        "nome": "Sentiero Costa al Sole",
+        "nome_en": "Sentiero Costa al Sole",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260708,
+          45.22095
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233863",
+        "nome": "Sentiero Costa",
+        "nome_en": "Sentiero Costa",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.26367,
+          45.221038
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7888233864",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.254178,
+          45.22314
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281813",
+        "nome": "Sentiero Costa all'Ombra",
+        "nome_en": "Sentiero Costa all'Ombra",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.247549,
+          45.222621
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281814",
+        "nome": "Sentiero Darola",
+        "nome_en": "Sentiero Darola",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.245631,
+          45.227294
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281815",
+        "nome": "Sentiero Darola",
+        "nome_en": "Sentiero Darola",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.246376,
+          45.227388
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281871",
+        "nome": "Sentiero Osari",
+        "nome_en": "Sentiero Osari",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.25139,
+          45.222975
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281872",
+        "nome": "Sentiero Osari",
+        "nome_en": "Sentiero Osari",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.257036,
+          45.223152
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281873",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260914,
+          45.222395
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281874",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264025,
+          45.220988
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281875",
+        "nome": "Sentiero di Mezzo della Crocetta",
+        "nome_en": "Sentiero di Mezzo della Crocetta",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264534,
+          45.220643
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281876",
+        "nome": "Sentiero Crocetta",
+        "nome_en": "Sentiero Crocetta",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264661,
+          45.22068
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281877",
+        "nome": "Sentiero di Bordura",
+        "nome_en": "Sentiero di Bordura",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264658,
+          45.220521
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281878",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.262462,
+          45.230887
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281879",
+        "nome": "Sentiero di Mezzo della Crocetta",
+        "nome_en": "Sentiero di Mezzo della Crocetta",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.262384,
+          45.23101
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281880",
+        "nome": "Loc. La Rolassa",
+        "nome_en": "Loc. La Rolassa",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.265281,
+          45.231649
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281912",
+        "nome": "Sentiero Crocetta",
+        "nome_en": "Sentiero Crocetta",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.265948,
+          45.22412
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281913",
+        "nome": "Sentiero della Rombinella",
+        "nome_en": "Sentiero della Rombinella",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.271659,
+          45.225656
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281918",
+        "nome": "Str. di Mezzo, La Rolassa",
+        "nome_en": "Str. di Mezzo, La Rolassa",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.271591,
+          45.225591
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281919",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.271483,
+          45.225595
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281920",
+        "nome": "Sentiero della Rombinella",
+        "nome_en": "Sentiero della Rombinella",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.271741,
+          45.225553
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281921",
+        "nome": "Ingresso La Generala",
+        "nome_en": "Ingresso La Generala",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.271698,
+          45.225574
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281922",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.276777,
+          45.22003
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281923",
+        "nome": "Sentiero della Rombinella",
+        "nome_en": "Sentiero della Rombinella",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.276861,
+          45.219871
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281924",
+        "nome": "Sentiero di Bordura",
+        "nome_en": "Sentiero di Bordura",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.277326,
+          45.219793
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7891281925",
+        "nome": "Rifugio Termini",
+        "nome_en": "Rifugio Termini",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.256862,
+          45.232446
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-7961227973",
+        "nome": "Sentiero Paludi",
+        "nome_en": "Sentiero Paludi",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.245342,
+          45.22735
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8044177968",
+        "nome": "Sentiero Granda Badia",
+        "nome_en": "Sentiero Granda Badia",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.247421,
+          45.232575
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8044177969",
+        "nome": "Rio Lamporo",
+        "nome_en": "Rio Lamporo",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.247226,
+          45.232557
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8044177971",
+        "nome": "Sentiero Granda Badia",
+        "nome_en": "Sentiero Granda Badia",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.25314,
+          45.229036
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8044177972",
+        "nome": "Sentiero Prà Merlino",
+        "nome_en": "Sentiero Prà Merlino",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.252779,
+          45.228701
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8044177973",
+        "nome": "Sentiero di mezzo Osari",
+        "nome_en": "Sentiero di mezzo Osari",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.277487,
+          45.218803
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8225374331",
+        "nome": "Ingresso Cascina Generala",
+        "nome_en": "Ingresso Cascina Generala",
+        "categoria": "parcheggio",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.277071,
+          45.221688
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8225374334",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.277045,
+          45.221697
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8225374335",
+        "nome": "Panchina",
+        "nome_en": "Bench",
+        "categoria": "panchina",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.277047,
+          45.221679
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8225374336",
+        "nome": "Panchina",
+        "nome_en": "Bench",
+        "categoria": "panchina",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.256657,
+          45.229759
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8225374342",
+        "nome": "Rondò Paludi",
+        "nome_en": "Rondò Paludi",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.261146,
+          45.220944
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8254732267",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.254747,
+          45.221407
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8254732268",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.265483,
+          45.231794
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-8762247747",
+        "nome": "Sentiero Paludi",
+        "nome_en": "Sentiero Paludi",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.229248,
+          45.214144
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-9983778828",
+        "nome": "Ciclovia del Po",
+        "nome_en": "Ciclovia del Po",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.230368,
+          45.219206
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-9983778836",
+        "nome": "Ingresso / Cancello",
+        "nome_en": "Entrance / Gate",
+        "categoria": "ingresso",
+        "sottocategoria": "gate",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.261688,
+          45.215001
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157650790",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260736,
+          45.21625
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157650794",
+        "nome": "Sentiero Divisioni",
+        "nome_en": "Sentiero Divisioni",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.253749,
+          45.221032
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157650799",
+        "nome": "Sentiero Mezzo Costa al Sole",
+        "nome_en": "Sentiero Mezzo Costa al Sole",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.262012,
+          45.215125
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157650800",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.261647,
+          45.215071
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157650801",
+        "nome": "Area Picnic",
+        "nome_en": "Picnic Area",
+        "categoria": "area_sosta",
+        "sottocategoria": "picnic",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.253756,
+          45.221108
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157650803",
+        "nome": "Panchina",
+        "nome_en": "Bench",
+        "categoria": "panchina",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.25497,
+          45.23345
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157769321",
+        "nome": "Fontana Divisioni",
+        "nome_en": "Fontana Divisioni",
+        "categoria": "fontanella",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264743,
+          45.236068
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157769322",
+        "nome": "Fontana dello Zolfo",
+        "nome_en": "Fontana dello Zolfo",
+        "categoria": "fontanella",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264858,
+          45.234686
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157769323",
+        "nome": "Fontana del Cappello",
+        "nome_en": "Fontana del Cappello",
+        "categoria": "fontanella",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.271379,
+          45.235247
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157769324",
+        "nome": "Fontana del gigante",
+        "nome_en": "Fontana del gigante",
+        "categoria": "fontanella",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.262113,
+          45.214975
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157769325",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "map",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.262108,
+          45.215004
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-10157769326",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264516,
+          45.220568
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11097422996",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.261057,
+          45.221093
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11097422997",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.25428,
+          45.22129
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11097422998",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.256561,
+          45.229507
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101774196",
+        "nome": "Panchina",
+        "nome_en": "Bench",
+        "categoria": "panchina",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.256702,
+          45.229623
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101774197",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.256637,
+          45.229653
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101774198",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.253755,
+          45.23523
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101774201",
+        "nome": "Sentiero Segatura",
+        "nome_en": "Sentiero Segatura",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.259995,
+          45.236698
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101774202",
+        "nome": "Paludi di Mezzo Est",
+        "nome_en": "Paludi di Mezzo Est",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.265054,
+          45.23737
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880239",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264691,
+          45.237254
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880240",
+        "nome": "Paludi di Mezzo Est",
+        "nome_en": "Paludi di Mezzo Est",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.265037,
+          45.236078
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880241",
+        "nome": "Fontana dello Zolfo",
+        "nome_en": "Fontana dello Zolfo",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264587,
+          45.234736
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880242",
+        "nome": "Fontana del Cappello",
+        "nome_en": "Fontana del Cappello",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.268089,
+          45.231858
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880243",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264794,
+          45.230751
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880244",
+        "nome": "Betulleto",
+        "nome_en": "Betulleto",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260906,
+          45.222456
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880245",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260892,
+          45.222459
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11101880246",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264772,
+          45.220367
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838970",
+        "nome": "Il Bosco delle Sorti della Partecipanza di Trino",
+        "nome_en": "Il Bosco delle Sorti della Partecipanza di Trino",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264758,
+          45.220375
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838971",
+        "nome": "Parco Naturale del Bosco delle Sorti della Partecipanza di Trino",
+        "nome_en": "Parco Naturale del Bosco delle Sorti della Partecipanza di Trino",
+        "categoria": "bacheca",
+        "sottocategoria": "map",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264596,
+          45.220581
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838972",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.26463,
+          45.220557
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838973",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264172,
+          45.220809
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838975",
+        "nome": "La grande quercia caduta",
+        "nome_en": "La grande quercia caduta",
+        "categoria": "bacheca",
+        "sottocategoria": "board",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260801,
+          45.220846
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838976",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260711,
+          45.222539
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838977",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260698,
+          45.222641
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835838978",
+        "nome": "Rifugio dei Cacciatori",
+        "nome_en": "Rifugio dei Cacciatori",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.278593,
+          45.213475
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835896435",
+        "nome": "Albero particolare",
+        "nome_en": "Notable Tree",
+        "categoria": "albero_monumentale",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.254518,
+          45.2213
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-11835918637",
+        "nome": "Bacheca informativa",
+        "nome_en": "Information Board",
+        "categoria": "bacheca",
+        "sottocategoria": "guidepost",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260938,
+          45.222558
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-12943749497",
+        "nome": "Area Picnic",
+        "nome_en": "Picnic Area",
+        "categoria": "area_sosta",
+        "sottocategoria": "picnic",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260933,
+          45.222542
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-12943765238",
+        "nome": "Area Picnic",
+        "nome_en": "Picnic Area",
+        "categoria": "area_sosta",
+        "sottocategoria": "picnic",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260909,
+          45.222525
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-node-12943767125",
+        "nome": "Cestino",
+        "nome_en": "Waste Bin",
+        "categoria": "cestino",
+        "sottocategoria": null,
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.228168,
+          45.220805
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-75472165",
+        "nome": "Chiesa del Santissimo nome di Maria",
+        "nome_en": "Chiesa del Santissimo nome di Maria",
+        "categoria": "struttura",
+        "sottocategoria": "church",
+        "descrizione": "Costruita su un preesistente edificio sacro, apparteneva al complesso abbaziale di Lucedio e dipendeva dalla grangia di Montarolo.",
+        "descrizione_en": "Costruita su un preesistente edificio sacro, apparteneva al complesso abbaziale di Lucedio e dipendeva dalla grangia di Montarolo.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.230925,
+          45.215851
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-124103632",
+        "nome": "Tenuta Montarolo",
+        "nome_en": "Tenuta Montarolo",
+        "categoria": "struttura",
+        "sottocategoria": "yes",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.234549,
+          45.237529
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-163840219",
+        "nome": "Abbazia di Santa Maria di Lucedio",
+        "nome_en": "Abbazia di Santa Maria di Lucedio",
+        "categoria": "struttura",
+        "sottocategoria": "yes",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.233174,
+          45.23724
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-163840221",
+        "nome": "Chiesa del Popolo",
+        "nome_en": "Chiesa del Popolo",
+        "categoria": "struttura",
+        "sottocategoria": "church",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.232662,
+          45.237249
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-240973062",
+        "nome": "Parcheggio",
+        "nome_en": "Parking",
+        "categoria": "parcheggio",
+        "sottocategoria": null,
+        "descrizione": "Fondo: grass · Accesso: yes",
+        "descrizione_en": "Surface: grass",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260971,
+          45.222555
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-243761286",
+        "nome": "Rifugio dei Cacciatori",
+        "nome_en": "Rifugio dei Cacciatori",
+        "categoria": "struttura",
+        "sottocategoria": "yes",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.231595,
+          45.215595
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-726646066",
+        "nome": "Chiesa dei Santi Pietro e Paolo",
+        "nome_en": "Chiesa dei Santi Pietro e Paolo",
+        "categoria": "struttura",
+        "sottocategoria": "church",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.260044,
+          45.210265
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-845502741",
+        "nome": "Parcheggio",
+        "nome_en": "Parking",
+        "categoria": "parcheggio",
+        "sottocategoria": null,
+        "descrizione": "Accesso: customers",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.259358,
+          45.210449
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-845502742",
+        "nome": "Parcheggio",
+        "nome_en": "Parking",
+        "categoria": "parcheggio",
+        "sottocategoria": null,
+        "descrizione": "Accesso: customers",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.271621,
+          45.22563
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-845840421",
+        "nome": "Rifugio Termini",
+        "nome_en": "Rifugio Termini",
+        "categoria": "struttura",
+        "sottocategoria": "yes",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.264927,
+          45.220295
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-846636480",
+        "nome": "Ingresso Ponte d'Assi",
+        "nome_en": "Ingresso Ponte d'Assi",
+        "categoria": "parcheggio",
+        "sottocategoria": null,
+        "descrizione": "Accesso: yes",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.234455,
+          45.237136
+        ]
+      },
+      "properties": {
+        "id": "poi-osm-way-964660582",
+        "nome": "Chiesa di Santa Maria di Lucedio",
+        "nome_en": "Chiesa di Santa Maria di Lucedio",
+        "categoria": "struttura",
+        "sottocategoria": "church",
+        "descrizione": "Dato pubblico importato da OpenStreetMap. Da verificare sul campo.",
+        "descrizione_en": "Public data imported from OpenStreetMap. Field verification pending.",
+        "foto": [],
+        "aggiornato_il": "2026-11-13",
+        "fonte": "osm"
+      }
+    }
+  ]
+}

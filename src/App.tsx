@@ -1,0 +1,331 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Compass, LocateFixed, X } from 'lucide-react';
+import { CATEGORIES } from './data/categories';
+import { t } from './i18n';
+import {
+  CategoryId,
+  Language,
+  PoiCollection,
+  PoiFeature,
+  SelectedItem,
+  TrailCollection,
+} from './types';
+import { findNearestPoi, formatDistance } from './utils/geo';
+import { MapView } from './components/MapView';
+import { SearchBar } from './components/SearchBar';
+import { CategoryFilterBar } from './components/CategoryFilterBar';
+import { DetailSheet } from './components/DetailSheet';
+
+const EMPTY_POIS: PoiCollection = { type: 'FeatureCollection', features: [] };
+const EMPTY_TRAILS: TrailCollection = { type: 'FeatureCollection', features: [] };
+const EMPTY_FC: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
+
+export function App() {
+  const [lang, setLang] = useState<Language>('it');
+  const [pois, setPois] = useState<PoiCollection>(EMPTY_POIS);
+  const [trails, setTrails] = useState<TrailCollection>(EMPTY_TRAILS);
+  const [boundary, setBoundary] = useState<GeoJSON.FeatureCollection>(EMPTY_FC);
+
+  const [activeCategory, setActiveCategory] = useState<CategoryId | 'all'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showTrails, setShowTrails] = useState(true);
+  const [is3D, setIs3D] = useState(true);
+  const [exaggeration, setExaggeration] = useState(4.0);
+
+  const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
+  const [flyToCoords, setFlyToCoords] = useState<[number, number] | null>(null);
+
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [userAccuracy, setUserAccuracy] = useState<number | null>(null);
+  const [gpsWatching, setGpsWatching] = useState(false);
+  const [gpsError, setGpsError] = useState<string | null>(null);
+
+  const [showNearestPicker, setShowNearestPicker] = useState(false);
+  const [nearestTarget, setNearestTarget] = useState<{
+    poi: PoiFeature;
+    distanceM: number;
+  } | null>(null);
+
+  const [isOnline, setIsOnline] = useState(
+    typeof navigator !== 'undefined' ? navigator.onLine : true
+  );
+
+  // Load GeoJSON data
+  useEffect(() => {
+    Promise.all([
+      fetch('/data/pois.geojson').then((r) => r.json()),
+      fetch('/data/trails.geojson').then((r) => r.json()),
+      fetch('/data/boundary.geojson').then((r) => r.json()),
+    ])
+      .then(([poisData, trailsData, boundaryData]) => {
+        setPois(poisData);
+        setTrails(trailsData);
+        setBoundary(boundaryData);
+      })
+      .catch((err) => {
+        console.error('Failed to load GeoJSON data:', err);
+      });
+  }, []);
+
+  // Online / Offline listeners
+  useEffect(() => {
+    const onOnline = () => setIsOnline(true);
+    const onOffline = () => setIsOnline(false);
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', onOffline);
+    return () => {
+      window.removeEventListener('online', onOnline);
+      window.removeEventListener('offline', onOffline);
+    };
+  }, []);
+
+  // Category counts for chips
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of pois.features) {
+      counts[p.properties.categoria] = (counts[p.properties.categoria] || 0) + 1;
+    }
+    return counts;
+  }, [pois]);
+
+  // GPS tracking
+  const startGps = (centerOnFix = true) => {
+    if (!('geolocation' in navigator)) {
+      setGpsError(t(lang, 'gpsError'));
+      return;
+    }
+    setGpsError(null);
+    setGpsWatching(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords: [number, number] = [
+          pos.coords.longitude,
+          pos.coords.latitude,
+        ];
+        setUserLocation(coords);
+        setUserAccuracy(Math.round(pos.coords.accuracy));
+        if (centerOnFix) {
+          setFlyToCoords([...coords]);
+        }
+      },
+      () => {
+        setGpsError(t(lang, 'gpsError'));
+        setGpsWatching(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
+    );
+  };
+
+  useEffect(() => {
+    if (!gpsWatching || !('geolocation' in navigator)) return;
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        setUserLocation([pos.coords.longitude, pos.coords.latitude]);
+        setUserAccuracy(Math.round(pos.coords.accuracy));
+      },
+      () => {},
+      { enableHighAccuracy: true, maximumAge: 5000 }
+    );
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [gpsWatching]);
+
+  const handleFindNearest = (category: CategoryId) => {
+    setShowNearestPicker(false);
+    if (!userLocation) {
+      startGps(false);
+      // Fallback: if GPS isn't ready yet, notify user
+      if (!('geolocation' in navigator)) return;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords: [number, number] = [
+            pos.coords.longitude,
+            pos.coords.latitude,
+          ];
+          setUserLocation(coords);
+          const res = findNearestPoi(coords, pois.features, category);
+          if (res) {
+            setNearestTarget(res);
+            setSelectedItem({ kind: 'poi', feature: res.poi });
+            setFlyToCoords([...res.poi.geometry.coordinates]);
+          } else {
+            setGpsError(t(lang, 'noPoiInCategory'));
+          }
+        },
+        () => setGpsError(t(lang, 'gpsError')),
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+      return;
+    }
+
+    const res = findNearestPoi(userLocation, pois.features, category);
+    if (res) {
+      setNearestTarget(res);
+      setSelectedItem({ kind: 'poi', feature: res.poi });
+      setFlyToCoords([...res.poi.geometry.coordinates]);
+    } else {
+      setGpsError(t(lang, 'noPoiInCategory'));
+    }
+  };
+
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-slate-100">
+      <MapView
+        pois={pois}
+        trails={trails}
+        boundary={boundary}
+        activeCategory={activeCategory}
+        searchQuery={searchQuery}
+        showTrails={showTrails}
+        is3D={is3D}
+        exaggeration={exaggeration}
+        lang={lang}
+        userLocation={userLocation}
+        userAccuracy={userAccuracy}
+        nearestTarget={nearestTarget?.poi ?? null}
+        selectedItem={selectedItem}
+        onSelectItem={(item) => setSelectedItem(item)}
+        flyToCoords={flyToCoords}
+      />
+
+      <SearchBar
+        lang={lang}
+        onToggleLang={() => setLang((l) => (l === 'it' ? 'en' : 'it'))}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        pois={pois.features}
+        trails={trails.features}
+        onSelectResult={(item, coords) => {
+          setSelectedItem(item);
+          setFlyToCoords([...coords]);
+        }}
+        is3D={is3D}
+        onToggle3D={() => setIs3D((v) => !v)}
+        exaggeration={exaggeration}
+        onChangeExaggeration={setExaggeration}
+        isOnline={isOnline}
+      />
+
+      <CategoryFilterBar
+        lang={lang}
+        activeCategory={activeCategory}
+        onSelectCategory={setActiveCategory}
+        showTrails={showTrails}
+        onToggleTrails={() => setShowTrails((v) => !v)}
+        counts={categoryCounts}
+      />
+
+      {/* GPS / Error toast */}
+      {gpsError && (
+        <div className="pointer-events-auto absolute inset-x-4 top-32 z-30 mx-auto flex max-w-md items-center justify-between rounded-2xl bg-red-600 px-3.5 py-2 text-xs font-medium text-white shadow-lg">
+          <span>{gpsError}</span>
+          <button
+            type="button"
+            onClick={() => setGpsError(null)}
+            className="ml-2 rounded-full p-0.5 hover:bg-red-700"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Nearest active banner */}
+      {nearestTarget && (
+        <div className="pointer-events-auto absolute left-3 bottom-24 z-20 flex items-center gap-2 rounded-2xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-lg">
+          <Compass className="h-4 w-4" />
+          <span>
+            {t(lang, 'nearestFound')}: {formatDistance(nearestTarget.distanceM, lang)}
+          </span>
+          <button
+            type="button"
+            onClick={() => setNearestTarget(null)}
+            className="ml-1 rounded-full bg-blue-700 px-2 py-0.5 text-[11px] hover:bg-blue-800"
+          >
+            {t(lang, 'cancelNearest')}
+          </button>
+        </div>
+      )}
+
+      {/* Floating Action Buttons (GPS & Nearest) */}
+      {!selectedItem && (
+        <div className="pointer-events-auto absolute bottom-8 left-3 z-20 flex flex-col gap-2 pb-[env(safe-area-inset-bottom)]">
+          <button
+            type="button"
+            onClick={() => startGps(true)}
+            className={`flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-xs font-semibold shadow-lg backdrop-blur-md transition ${
+              userLocation
+                ? 'bg-blue-600 text-white'
+                : 'bg-white/95 text-slate-800 hover:bg-white'
+            }`}
+          >
+            <LocateFixed className="h-4 w-4" />
+            <span>
+              {userLocation
+                ? `${t(lang, 'gpsActive')}${userAccuracy ? ` (±${userAccuracy} m)` : ''}`
+                : t(lang, 'gpsOff')}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowNearestPicker((v) => !v)}
+            className="flex items-center gap-2 rounded-2xl bg-emerald-800 px-3.5 py-2.5 text-xs font-semibold text-white shadow-lg hover:bg-emerald-900"
+          >
+            <Compass className="h-4 w-4" />
+            <span>{t(lang, 'nearestBtn')}</span>
+          </button>
+        </div>
+      )}
+
+      {/* Nearest Category Picker Modal */}
+      {showNearestPicker && (
+        <div className="pointer-events-auto absolute inset-x-3 bottom-24 z-30 mx-auto max-w-md rounded-3xl border border-slate-200 bg-white/98 p-4 shadow-2xl backdrop-blur-md">
+          <div className="mb-2.5 flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-900">
+              {t(lang, 'nearestPrompt')}
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowNearestPicker(false)}
+              className="rounded-full p-1 text-slate-400 hover:bg-slate-100"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-1.5">
+            {CATEGORIES.filter((c) => (categoryCounts[c.id] || 0) > 0).map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => handleFindNearest(cat.id)}
+                className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-left text-xs font-medium text-slate-800 hover:border-emerald-600 hover:bg-emerald-50"
+              >
+                <span>{cat.emoji}</span>
+                <span className="truncate">
+                  {lang === 'en' ? cat.label_en : cat.label_it}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Attribution footer (compact) */}
+      {!selectedItem && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-1 z-10 text-center text-[9px] text-slate-600/80">
+          {t(lang, 'attribution')}
+        </div>
+      )}
+
+      <DetailSheet
+        item={selectedItem}
+        lang={lang}
+        userLocation={userLocation}
+        isOnline={isOnline}
+        onClose={() => setSelectedItem(null)}
+      />
+    </div>
+  );
+}
+
+export default App;
