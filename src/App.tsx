@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Compass, LocateFixed, Navigation2, X } from 'lucide-react';
+import { Compass, LocateFixed, MapPinPlus, Navigation2, X } from 'lucide-react';
 import { CATEGORIES } from './data/categories';
 import { t } from './i18n';
 import {
   CategoryId,
   Language,
   PoiCollection,
+  PoiFeature,
   SelectedItem,
   TrailCollection,
+  TrailReport,
 } from './types';
 import { formatDistance } from './utils/geo';
 import {
@@ -16,12 +18,21 @@ import {
   NearestRouteResult,
 } from './utils/trailRouter';
 import { getOfflineStatus } from './utils/offlineManager';
+import {
+  clearFieldDrafts,
+  loadCustomPois,
+  loadTrailReports,
+  mergePoisWithCustom,
+  saveCustomPois,
+  saveTrailReports,
+} from './utils/fieldStorage';
 import { useCompass } from './hooks/useCompass';
 import { MapView } from './components/MapView';
 import { SearchBar } from './components/SearchBar';
 import { CategoryFilterBar } from './components/CategoryFilterBar';
 import { DetailSheet } from './components/DetailSheet';
 import { OfflineModal } from './components/OfflineModal';
+import { AddPoiModal, FieldDraftsModal } from './components/FieldSurveyModal';
 
 const EMPTY_POIS: PoiCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_TRAILS: TrailCollection = { type: 'FeatureCollection', features: [] };
@@ -52,6 +63,14 @@ export function App() {
 
   const [showOfflineModal, setShowOfflineModal] = useState(false);
   const [offlineReady, setOfflineReady] = useState(false);
+
+  const [fieldMode, setFieldMode] = useState(false);
+  const [customPois, setCustomPois] = useState<PoiFeature[]>(() => loadCustomPois());
+  const [trailReports, setTrailReports] = useState<Record<string, TrailReport>>(() =>
+    loadTrailReports()
+  );
+  const [draftPoiCoords, setDraftPoiCoords] = useState<[number, number] | null>(null);
+  const [showFieldDrafts, setShowFieldDrafts] = useState(false);
 
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true
@@ -108,14 +127,29 @@ export function App() {
     [trails]
   );
 
+  const mergedPois = useMemo(
+    () => mergePoisWithCustom(pois, customPois),
+    [pois, customPois]
+  );
+
+  const closedTrailIds = useMemo(
+    () =>
+      Object.values(trailReports)
+        .filter((r) => r.status === 'chiuso')
+        .map((r) => r.trailId),
+    [trailReports]
+  );
+
+  const fieldDraftCount = customPois.length + Object.keys(trailReports).length;
+
   // Category counts for chips
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const p of pois.features) {
+    for (const p of mergedPois.features) {
       counts[p.properties.categoria] = (counts[p.properties.categoria] || 0) + 1;
     }
     return counts;
-  }, [pois]);
+  }, [mergedPois]);
 
   // GPS tracking
   const startGps = (centerOnFix = true) => {
@@ -162,7 +196,7 @@ export function App() {
   const applyNearestResult = (coords: [number, number], category: CategoryId) => {
     const res = findNearestPoiAlongTrails(
       coords,
-      pois.features,
+      mergedPois.features,
       trailGraph,
       category
     );
@@ -199,10 +233,59 @@ export function App() {
     applyNearestResult(userLocation, category);
   };
 
+  const handleSaveCustomPoi = (newPoi: PoiFeature) => {
+    const updated = [...customPois, newPoi];
+    setCustomPois(updated);
+    saveCustomPois(updated);
+    setDraftPoiCoords(null);
+    setSelectedItem({ kind: 'poi', feature: newPoi });
+  };
+
+  const handleDeleteCustomPoi = (id: string) => {
+    const updated = customPois.filter((p) => p.properties.id !== id);
+    setCustomPois(updated);
+    saveCustomPois(updated);
+  };
+
+  const handleSaveTrailReport = (report: TrailReport) => {
+    const updated = { ...trailReports, [report.trailId]: report };
+    setTrailReports(updated);
+    saveTrailReports(updated);
+  };
+
+  const handleClearFieldDrafts = () => {
+    clearFieldDrafts();
+    setCustomPois([]);
+    setTrailReports({});
+  };
+
+  const handleAddPoiAtGps = () => {
+    if (userLocation) {
+      setDraftPoiCoords([...userLocation]);
+      return;
+    }
+    if (!('geolocation' in navigator)) {
+      setGpsError(t(lang, 'gpsError'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords: [number, number] = [
+          pos.coords.longitude,
+          pos.coords.latitude,
+        ];
+        setUserLocation(coords);
+        setDraftPoiCoords(coords);
+      },
+      () => setGpsError(t(lang, 'gpsError')),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
   return (
     <div className="relative h-full w-full overflow-hidden bg-slate-100">
       <MapView
-        pois={pois}
+        pois={mergedPois}
         trails={trails}
         boundary={boundary}
         activeCategory={activeCategory}
@@ -217,6 +300,9 @@ export function App() {
         compassEnabled={compassEnabled}
         compassHeading={compassHeading}
         onDisableCompass={disableCompass}
+        fieldMode={fieldMode}
+        closedTrailIds={closedTrailIds}
+        onMapClickForPoi={(coords) => setDraftPoiCoords(coords)}
         selectedItem={selectedItem}
         onSelectItem={(item) => setSelectedItem(item)}
         flyToCoords={flyToCoords}
@@ -227,7 +313,7 @@ export function App() {
         onToggleLang={() => setLang((l) => (l === 'it' ? 'en' : 'it'))}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        pois={pois.features}
+        pois={mergedPois.features}
         trails={trails.features}
         onSelectResult={(item, coords) => {
           setSelectedItem(item);
@@ -240,6 +326,9 @@ export function App() {
         isOnline={isOnline}
         offlineReady={offlineReady}
         onOpenOfflineModal={() => setShowOfflineModal(true)}
+        fieldMode={fieldMode}
+        onToggleFieldMode={() => setFieldMode((v) => !v)}
+        fieldDraftCount={fieldDraftCount}
       />
 
       <CategoryFilterBar
@@ -250,6 +339,30 @@ export function App() {
         onToggleTrails={() => setShowTrails((v) => !v)}
         counts={categoryCounts}
       />
+
+      {/* Field Survey Mode Banner */}
+      {fieldMode && !selectedItem && (
+        <div className="pointer-events-auto absolute inset-x-3 top-28 z-20 mx-auto flex max-w-md flex-wrap items-center justify-between gap-2 rounded-2xl border border-amber-300 bg-amber-50/95 px-3 py-2 text-xs text-amber-950 shadow-lg backdrop-blur-md">
+          <span className="font-medium">{t(lang, 'fieldModeBanner')}</span>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleAddPoiAtGps}
+              className="flex items-center gap-1 rounded-xl bg-amber-600 px-2.5 py-1 font-semibold text-white hover:bg-amber-700"
+            >
+              <MapPinPlus className="h-3.5 w-3.5" />
+              <span>{t(lang, 'fieldAddAtGps')}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowFieldDrafts(true)}
+              className="rounded-xl border border-amber-300 bg-white px-2.5 py-1 font-semibold text-amber-900 hover:bg-amber-100"
+            >
+              {t(lang, 'fieldExportBtn')} ({fieldDraftCount})
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* GPS / Compass Error toast */}
       {(gpsError || compassError) && (
@@ -389,6 +502,13 @@ export function App() {
         lang={lang}
         userLocation={userLocation}
         isOnline={isOnline}
+        fieldMode={fieldMode}
+        trailReport={
+          selectedItem?.kind === 'trail'
+            ? trailReports[selectedItem.feature.properties.id]
+            : undefined
+        }
+        onSaveTrailReport={handleSaveTrailReport}
         onClose={() => setSelectedItem(null)}
       />
 
@@ -398,6 +518,24 @@ export function App() {
         isOnline={isOnline}
         onClose={() => setShowOfflineModal(false)}
         onStatusChange={setOfflineReady}
+      />
+
+      <AddPoiModal
+        coords={draftPoiCoords}
+        lang={lang}
+        onClose={() => setDraftPoiCoords(null)}
+        onSave={handleSaveCustomPoi}
+      />
+
+      <FieldDraftsModal
+        open={showFieldDrafts}
+        lang={lang}
+        mergedPois={mergedPois}
+        customPois={customPois}
+        trailReports={trailReports}
+        onClose={() => setShowFieldDrafts(false)}
+        onDeleteCustomPoi={handleDeleteCustomPoi}
+        onClearAll={handleClearFieldDrafts}
       />
     </div>
   );

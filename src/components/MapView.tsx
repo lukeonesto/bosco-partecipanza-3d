@@ -25,6 +25,9 @@ interface MapViewProps {
   compassEnabled: boolean;
   compassHeading: number | null;
   onDisableCompass: () => void;
+  fieldMode: boolean;
+  closedTrailIds: string[];
+  onMapClickForPoi: (coords: [number, number]) => void;
   selectedItem: SelectedItem | null;
   onSelectItem: (item: SelectedItem | null) => void;
   flyToCoords: [number, number] | null;
@@ -58,6 +61,9 @@ export function MapView({
   compassEnabled,
   compassHeading,
   onDisableCompass,
+  fieldMode,
+  closedTrailIds,
+  onMapClickForPoi,
   selectedItem,
   onSelectItem,
   flyToCoords,
@@ -69,6 +75,10 @@ export function MapView({
   onSelectRef.current = onSelectItem;
   const onDisableCompassRef = useRef(onDisableCompass);
   onDisableCompassRef.current = onDisableCompass;
+  const fieldModeRef = useRef(fieldMode);
+  fieldModeRef.current = fieldMode;
+  const onMapClickForPoiRef = useRef(onMapClickForPoi);
+  onMapClickForPoiRef.current = onMapClickForPoi;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -324,7 +334,11 @@ export function MapView({
           layers: ['pois-circle', 'trails-hit'],
         });
         if (hits.length === 0) {
-          onSelectRef.current(null);
+          if (fieldModeRef.current) {
+            onMapClickForPoiRef.current([e.lngLat.lng, e.lngLat.lat]);
+          } else {
+            onSelectRef.current(null);
+          }
         }
       });
 
@@ -497,6 +511,18 @@ export function MapView({
       easing: (t) => t,
     });
   }, [compassEnabled, compassHeading]);
+
+  // Highlight closed trails in red
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !loadedRef.current || !map.getLayer('trails-line')) return;
+    map.setPaintProperty('trails-line', 'line-color', [
+      'case',
+      ['in', ['get', 'id'], ['literal', closedTrailIds]],
+      '#dc2626',
+      '#b45309',
+    ]);
+  }, [closedTrailIds]);
 
   // Highlight selected POI radius
   useEffect(() => {

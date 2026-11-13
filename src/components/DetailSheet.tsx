@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   X,
   Navigation,
@@ -6,10 +7,11 @@ import {
   Calendar,
   WifiOff,
   ExternalLink,
+  AlertTriangle,
 } from 'lucide-react';
 import { CATEGORY_MAP, getCategoryLabel } from '../data/categories';
 import { getLocalizedText, t } from '../i18n';
-import { Language, SelectedItem } from '../types';
+import { Language, SelectedItem, TrailReport, TrailStatus } from '../types';
 import {
   formatDistance,
   formatDuration,
@@ -21,6 +23,9 @@ interface DetailSheetProps {
   lang: Language;
   userLocation: [number, number] | null;
   isOnline: boolean;
+  fieldMode: boolean;
+  trailReport?: TrailReport;
+  onSaveTrailReport: (report: TrailReport) => void;
   onClose: () => void;
 }
 
@@ -29,8 +34,21 @@ export function DetailSheet({
   lang,
   userLocation,
   isOnline,
+  fieldMode,
+  trailReport,
+  onSaveTrailReport,
   onClose,
 }: DetailSheetProps) {
+  const [statusDraft, setStatusDraft] = useState<TrailStatus>(
+    trailReport?.status ?? 'aperto'
+  );
+  const [noteDraft, setNoteDraft] = useState(trailReport?.note ?? '');
+
+  useEffect(() => {
+    setStatusDraft(trailReport?.status ?? 'aperto');
+    setNoteDraft(trailReport?.note ?? '');
+  }, [trailReport, item]);
+
   if (!item) return null;
 
   if (item.kind === 'poi') {
@@ -202,6 +220,87 @@ export function DetailSheet({
       </div>
 
       <p className="mt-3 text-sm leading-relaxed text-slate-700">{description}</p>
+
+      {trailReport && (
+        <div
+          className={`mt-3 flex items-start gap-2 rounded-xl px-3 py-2 text-xs font-medium ${
+            trailReport.status === 'chiuso'
+              ? 'bg-red-50 text-red-800'
+              : trailReport.status === 'attenzione'
+                ? 'bg-amber-50 text-amber-800'
+                : 'bg-emerald-50 text-emerald-800'
+          }`}
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div>
+            <div className="font-bold">
+              {t(lang, 'trailStatusLabel')}:{' '}
+              {trailReport.status === 'chiuso'
+                ? t(lang, 'trailStatusClosed')
+                : trailReport.status === 'attenzione'
+                  ? t(lang, 'trailStatusCaution')
+                  : t(lang, 'trailStatusOpen')}
+            </div>
+            {trailReport.note && <div className="mt-0.5">{trailReport.note}</div>}
+          </div>
+        </div>
+      )}
+
+      {fieldMode && (
+        <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+          <div className="text-xs font-semibold text-slate-700">
+            {t(lang, 'trailStatusLabel')}
+          </div>
+          <div className="mt-1.5 flex gap-1.5">
+            {(['aperto', 'attenzione', 'chiuso'] as TrailStatus[]).map((st) => (
+              <button
+                key={st}
+                type="button"
+                onClick={() => setStatusDraft(st)}
+                className={`flex-1 rounded-xl border px-2 py-1.5 text-[11px] font-semibold transition ${
+                  statusDraft === st
+                    ? st === 'chiuso'
+                      ? 'border-red-600 bg-red-600 text-white'
+                      : st === 'attenzione'
+                        ? 'border-amber-500 bg-amber-500 text-white'
+                        : 'border-emerald-700 bg-emerald-700 text-white'
+                    : 'border-slate-200 bg-white text-slate-700'
+                }`}
+              >
+                {st === 'chiuso'
+                  ? t(lang, 'trailStatusClosed')
+                  : st === 'attenzione'
+                    ? t(lang, 'trailStatusCaution')
+                    : t(lang, 'trailStatusOpen')}
+              </button>
+            ))}
+          </div>
+          <div className="mt-2 flex gap-2">
+            <input
+              type="text"
+              value={noteDraft}
+              onChange={(e) => setNoteDraft(e.target.value)}
+              placeholder={t(lang, 'trailStatusNotePlaceholder')}
+              className="flex-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs focus:border-emerald-600 focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={() =>
+                onSaveTrailReport({
+                  trailId: properties.id,
+                  trailName: title,
+                  status: statusDraft,
+                  note: noteDraft.trim(),
+                  updatedAt: new Date().toISOString(),
+                })
+              }
+              className="rounded-xl bg-emerald-800 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-900"
+            >
+              {t(lang, 'trailStatusSave')}
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs text-slate-500">
         <span className="inline-flex items-center gap-1">

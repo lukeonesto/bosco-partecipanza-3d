@@ -89,3 +89,13 @@ export interface TrailCollection {
 export type SelectedItem =
   | { kind: 'poi'; feature: PoiFeature }
   | { kind: 'trail'; feature: TrailFeature };
+
+export type TrailStatus = 'aperto' | 'attenzione' | 'chiuso';
+
+export interface TrailReport {
+  trailId: string;
+  trailName: string;
+  status: TrailStatus;
+  note: string;
+  updatedAt: string;
+}

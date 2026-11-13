@@ -32,5 +32,6 @@ Questo file raccoglie le decisioni architetturali, il lavoro svolto e i prossimi
 - [x] **Distanza e percorso lungo i sentieri**: router su grafo dei sentieri (`trailRouter.ts` su `trails.geojson` con algoritmo di Dijkstra, snapping sui segmenti e fallback in linea d'aria) per la funzione "Più vicino" e tracciamento del percorso reale sulla mappa.
 
 ### Fase 3 — Gestione contenuti sul campo e Admin
-- [ ] **Workflow aggiornamento POI/Sentieri**: interfaccia leggera (es. modale protetta o mini-backend Supabase / GitHub CMS) per aggiungere/modificare punti, segnalare chiusure sentieri e caricare foto direttamente dallo smartphone durante i sopralluoghi nel bosco.
+- [x] **Workflow aggiornamento POI/Sentieri (locale + export)**: aggiunta **Modalità Sopralluogo** (`FieldSurveyModal.tsx` + `fieldStorage.ts`) per inserire nuovi POI toccando la mappa o dalla posizione GPS, segnalare lo stato dei sentieri (`aperto`, `attenzione`, `chiuso` in rosso sulla mappa) con salvataggio persistente in `localStorage` ed export diretto di `pois.geojson` o JSON diff.
+- [ ] **Sincronizzazione cloud opzionale & foto sul campo**: eventuale endpoint/CMS (es. GitHub PR/API o Supabase) per invio diretto senza passaggio manuale del file esportato.
 - [ ] **Verifica e arricchimento dati sul campo**: censimento di panchine, cestini, fontanelle, bacheche e alberi monumentali non ancora presenti su OpenStreetMap.

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, X, Globe, Mountain, WifiOff, Download, CheckCircle2 } from 'lucide-react';
+import { Search, X, Globe, Mountain, WifiOff, Download, CheckCircle2, ClipboardEdit } from 'lucide-react';
 import { getLocalizedText, t } from '../i18n';
 import { Language, PoiFeature, TrailFeature, SelectedItem } from '../types';
 
@@ -18,6 +18,9 @@ interface SearchBarProps {
   isOnline: boolean;
   offlineReady: boolean;
   onOpenOfflineModal: () => void;
+  fieldMode: boolean;
+  onToggleFieldMode: () => void;
+  fieldDraftCount: number;
 }
 
 export function SearchBar({
@@ -35,6 +38,9 @@ export function SearchBar({
   isOnline,
   offlineReady,
   onOpenOfflineModal,
+  fieldMode,
+  onToggleFieldMode,
+  fieldDraftCount,
 }: SearchBarProps) {
   const [focused, setFocused] = useState(false);
   const [showReliefMenu, setShowReliefMenu] = useState(false);
@@ -201,6 +207,26 @@ export function SearchBar({
             </div>
           )}
         </div>
+
+        {/* Field Survey Mode Button */}
+        <button
+          type="button"
+          onClick={onToggleFieldMode}
+          aria-label={t(lang, 'fieldModeTitle')}
+          title={t(lang, 'fieldModeTitle')}
+          className={`relative flex items-center justify-center rounded-2xl border p-2.5 shadow-lg backdrop-blur-md transition ${
+            fieldMode
+              ? 'border-amber-600 bg-amber-600 text-white'
+              : 'border-slate-200 bg-white/95 text-slate-700 hover:bg-slate-50'
+          }`}
+        >
+          <ClipboardEdit className="h-4 w-4" />
+          {fieldDraftCount > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white">
+              {fieldDraftCount}
+            </span>
+          )}
+        </button>
 
         {/* Offline Mode Button */}
         <button
