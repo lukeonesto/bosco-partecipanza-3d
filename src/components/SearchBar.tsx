@@ -18,6 +18,7 @@ interface SearchBarProps {
   isOnline: boolean;
   offlineReady: boolean;
   onOpenOfflineModal: () => void;
+  isAdmin: boolean;
   fieldMode: boolean;
   onToggleFieldMode: () => void;
   fieldDraftCount: number;
@@ -38,6 +39,7 @@ export function SearchBar({
   isOnline,
   offlineReady,
   onOpenOfflineModal,
+  isAdmin,
   fieldMode,
   onToggleFieldMode,
   fieldDraftCount,
@@ -212,25 +214,27 @@ export function SearchBar({
           )}
         </div>
 
-        {/* Field Survey Mode Button */}
-        <button
-          type="button"
-          onClick={onToggleFieldMode}
-          aria-label={t(lang, 'fieldModeTitle')}
-          title={t(lang, 'fieldModeTitle')}
-          className={`liquid-interactive relative flex items-center justify-center rounded-full p-2.5 ${
-            fieldMode
-              ? 'liquid-tint-amber text-white'
-              : 'liquid-glass text-slate-800 hover:bg-white/80'
-          }`}
-        >
-          <ClipboardEdit className="h-4 w-4" />
-          {fieldDraftCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold tabular-nums text-white shadow-sm ring-2 ring-white/85">
-              {fieldDraftCount}
-            </span>
-          )}
-        </button>
+        {/* Field Survey Mode Button (Admin only) */}
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={onToggleFieldMode}
+            aria-label={t(lang, 'fieldModeTitle')}
+            title={t(lang, 'fieldModeTitle')}
+            className={`liquid-interactive relative flex items-center justify-center rounded-full p-2.5 ${
+              fieldMode
+                ? 'liquid-tint-amber text-white'
+                : 'liquid-glass text-slate-800 hover:bg-white/80'
+            }`}
+          >
+            <ClipboardEdit className="h-4 w-4" />
+            {fieldDraftCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold tabular-nums text-white shadow-sm ring-2 ring-white/85">
+                {fieldDraftCount}
+              </span>
+            )}
+          </button>
+        )}
 
         {/* Offline Mode Button */}
         <button

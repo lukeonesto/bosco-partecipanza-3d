@@ -81,6 +81,12 @@ const translations = {
     trailStatusClosed: 'Chiuso / Impraticabile',
     trailStatusNotePlaceholder: 'Nota segnalazione (es. albero caduto, fango)...',
     trailStatusSave: 'Salva stato',
+    adminModalTitle: 'Accesso Admin',
+    adminModalDesc: 'Inserisci il PIN amministratore per sbloccare la Modalità Sopralluogo.',
+    adminPinPlaceholder: 'PIN amministratore',
+    adminUnlockBtn: 'Sblocca Admin',
+    adminWrongPin: 'PIN non valido.',
+    adminLockBtn: 'Esci Admin',
   },
   en: {
     appTitle: 'Partecipanza Woods',
@@ -162,6 +168,12 @@ const translations = {
     trailStatusClosed: 'Closed / Impassable',
     trailStatusNotePlaceholder: 'Report note (e.g. fallen tree, mud)...',
     trailStatusSave: 'Save status',
+    adminModalTitle: 'Admin Access',
+    adminModalDesc: 'Enter the admin PIN to unlock Field Survey Mode.',
+    adminPinPlaceholder: 'Admin PIN',
+    adminUnlockBtn: 'Unlock Admin',
+    adminWrongPin: 'Invalid PIN.',
+    adminLockBtn: 'Lock Admin',
   },
 } as const;
 

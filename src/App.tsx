@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Compass, LocateFixed, MapPinPlus, Navigation2, X } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Compass, LocateFixed, Lock, MapPinPlus, Navigation2, X } from 'lucide-react';
 import { CATEGORIES } from './data/categories';
 import { t } from './i18n';
 import {
@@ -33,6 +33,8 @@ import { CategoryFilterBar } from './components/CategoryFilterBar';
 import { DetailSheet } from './components/DetailSheet';
 import { OfflineModal } from './components/OfflineModal';
 import { AddPoiModal, FieldDraftsModal } from './components/FieldSurveyModal';
+import { AdminPinModal } from './components/AdminPinModal';
+import { isAdminUnlocked, lockAdmin } from './utils/adminAuth';
 
 const EMPTY_POIS: PoiCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_TRAILS: TrailCollection = { type: 'FeatureCollection', features: [] };
@@ -63,6 +65,13 @@ export function App() {
 
   const [showOfflineModal, setShowOfflineModal] = useState(false);
   const [offlineReady, setOfflineReady] = useState(false);
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => isAdminUnlocked());
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const adminTapRef = useRef<{ count: number; lastTap: number }>({
+    count: 0,
+    lastTap: 0,
+  });
 
   const [fieldMode, setFieldMode] = useState(false);
   const [customPois, setCustomPois] = useState<PoiFeature[]>(() => loadCustomPois());
@@ -115,11 +124,18 @@ export function App() {
     };
   }, []);
 
-  // Check initial offline pack status
+  // Check initial offline pack status & optional ?admin=1 / #admin trigger
   useEffect(() => {
     getOfflineStatus()
       .then((s) => setOfflineReady(s.isComplete))
       .catch(() => {});
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === '1' || window.location.hash === '#admin') {
+      if (!isAdminUnlocked()) {
+        setShowAdminModal(true);
+      }
+    }
   }, []);
 
   // Build trail routing graph once trails load
@@ -305,7 +321,7 @@ export function App() {
         compassEnabled={compassEnabled}
         compassHeading={compassHeading}
         onDisableCompass={disableCompass}
-        fieldMode={fieldMode}
+        fieldMode={isAdmin && fieldMode}
         closedTrailIds={closedTrailIds}
         onMapClickForPoi={(coords) => setDraftPoiCoords(coords)}
         selectedItem={selectedItem}
@@ -331,7 +347,8 @@ export function App() {
         isOnline={isOnline}
         offlineReady={offlineReady}
         onOpenOfflineModal={() => setShowOfflineModal(true)}
-        fieldMode={fieldMode}
+        isAdmin={isAdmin}
+        fieldMode={isAdmin && fieldMode}
         onToggleFieldMode={() => setFieldMode((v) => !v)}
         fieldDraftCount={fieldDraftCount}
       />
@@ -345,11 +362,11 @@ export function App() {
         counts={categoryCounts}
       />
 
-      {/* Field Survey Mode Banner */}
-      {fieldMode && !selectedItem && (
+      {/* Field Survey Mode Banner (Admin only) */}
+      {isAdmin && fieldMode && !selectedItem && (
         <div className="liquid-glass-elevated animate-liquid-pop pointer-events-auto absolute inset-x-3 top-[7.5rem] z-20 mx-auto flex max-w-md flex-wrap items-center justify-between gap-2 rounded-3xl border border-amber-300/60 px-3.5 py-2.5 text-xs text-amber-950">
           <span className="font-semibold tracking-tight">{t(lang, 'fieldModeBanner')}</span>
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5">
             <button
               type="button"
               onClick={handleAddPoiAtGps}
@@ -364,6 +381,19 @@ export function App() {
               className="liquid-subcard liquid-interactive rounded-full px-3 py-1.5 font-semibold tabular-nums text-amber-950 hover:bg-white/80"
             >
               {t(lang, 'fieldExportBtn')} ({fieldDraftCount})
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                lockAdmin();
+                setIsAdmin(false);
+                setFieldMode(false);
+              }}
+              className="liquid-subcard liquid-interactive flex items-center gap-1 rounded-full px-2.5 py-1.5 font-semibold text-slate-600 hover:text-red-700"
+              title={t(lang, 'adminLockBtn')}
+            >
+              <Lock className="h-3 w-3" />
+              <span>{t(lang, 'adminLockBtn')}</span>
             </button>
           </div>
         </div>
@@ -495,9 +525,25 @@ export function App() {
         </div>
       )}
 
-      {/* Attribution footer (compact) */}
+      {/* Attribution footer (compact, 5-tap unlocks Admin PIN prompt) */}
       {!selectedItem && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-1.5 z-10 text-center text-[9px] font-medium text-slate-700/80 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
+        <div
+          onClick={() => {
+            if (isAdmin) return;
+            const now = Date.now();
+            if (now - adminTapRef.current.lastTap > 2000) {
+              adminTapRef.current.count = 1;
+            } else {
+              adminTapRef.current.count += 1;
+            }
+            adminTapRef.current.lastTap = now;
+            if (adminTapRef.current.count >= 5) {
+              adminTapRef.current.count = 0;
+              setShowAdminModal(true);
+            }
+          }}
+          className="pointer-events-auto absolute inset-x-0 bottom-1.5 z-10 mx-auto w-fit cursor-default select-none px-3 text-center text-[9px] font-medium text-slate-700/80 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]"
+        >
           {t(lang, 'attribution')}
         </div>
       )}
@@ -507,7 +553,7 @@ export function App() {
         lang={lang}
         userLocation={userLocation}
         isOnline={isOnline}
-        fieldMode={fieldMode}
+        fieldMode={isAdmin && fieldMode}
         trailReport={
           selectedItem?.kind === 'trail'
             ? trailReports[selectedItem.feature.properties.id]
@@ -549,6 +595,17 @@ export function App() {
         onClose={() => setShowFieldDrafts(false)}
         onDeleteCustomPoi={handleDeleteCustomPoi}
         onClearAll={handleClearFieldDrafts}
+      />
+
+      <AdminPinModal
+        open={showAdminModal}
+        lang={lang}
+        onClose={() => setShowAdminModal(false)}
+        onUnlocked={() => {
+          setIsAdmin(true);
+          setFieldMode(true);
+          setShowAdminModal(false);
+        }}
       />
     </div>
   );
