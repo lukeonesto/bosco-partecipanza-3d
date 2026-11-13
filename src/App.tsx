@@ -342,13 +342,13 @@ export function App() {
 
       {/* Field Survey Mode Banner */}
       {fieldMode && !selectedItem && (
-        <div className="pointer-events-auto absolute inset-x-3 top-28 z-20 mx-auto flex max-w-md flex-wrap items-center justify-between gap-2 rounded-2xl border border-amber-300 bg-amber-50/95 px-3 py-2 text-xs text-amber-950 shadow-lg backdrop-blur-md">
-          <span className="font-medium">{t(lang, 'fieldModeBanner')}</span>
+        <div className="liquid-glass-elevated animate-liquid-pop pointer-events-auto absolute inset-x-3 top-[7.5rem] z-20 mx-auto flex max-w-md flex-wrap items-center justify-between gap-2 rounded-3xl border border-amber-300/60 px-3.5 py-2.5 text-xs text-amber-950">
+          <span className="font-semibold tracking-tight">{t(lang, 'fieldModeBanner')}</span>
           <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={handleAddPoiAtGps}
-              className="flex items-center gap-1 rounded-xl bg-amber-600 px-2.5 py-1 font-semibold text-white hover:bg-amber-700"
+              className="liquid-tint-amber liquid-interactive flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold text-white"
             >
               <MapPinPlus className="h-3.5 w-3.5" />
               <span>{t(lang, 'fieldAddAtGps')}</span>
@@ -356,7 +356,7 @@ export function App() {
             <button
               type="button"
               onClick={() => setShowFieldDrafts(true)}
-              className="rounded-xl border border-amber-300 bg-white px-2.5 py-1 font-semibold text-amber-900 hover:bg-amber-100"
+              className="liquid-subcard liquid-interactive rounded-full px-3 py-1.5 font-semibold tabular-nums text-amber-950 hover:bg-white/80"
             >
               {t(lang, 'fieldExportBtn')} ({fieldDraftCount})
             </button>
@@ -366,7 +366,7 @@ export function App() {
 
       {/* GPS / Compass Error toast */}
       {(gpsError || compassError) && (
-        <div className="pointer-events-auto absolute inset-x-4 top-32 z-30 mx-auto flex max-w-md items-center justify-between rounded-2xl bg-red-600 px-3.5 py-2 text-xs font-medium text-white shadow-lg">
+        <div className="liquid-tint-red animate-liquid-pop pointer-events-auto absolute inset-x-4 top-32 z-30 mx-auto flex max-w-md items-center justify-between rounded-full px-4 py-2.5 text-xs font-semibold text-white">
           <span>{gpsError || compassError}</span>
           <button
             type="button"
@@ -374,18 +374,18 @@ export function App() {
               setGpsError(null);
               clearCompassError();
             }}
-            className="ml-2 rounded-full p-0.5 hover:bg-red-700"
+            className="liquid-interactive ml-2 rounded-full bg-white/15 p-1 hover:bg-white/25"
           >
-            <X className="h-4 w-4" />
+            <X className="h-3.5 w-3.5" />
           </button>
         </div>
       )}
 
       {/* Nearest active banner */}
       {nearestTarget && (
-        <div className="pointer-events-auto absolute left-3 bottom-24 z-20 flex flex-wrap items-center gap-2 rounded-2xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-lg">
+        <div className="liquid-tint-blue animate-liquid-pop pointer-events-auto absolute bottom-32 left-3 z-20 flex flex-wrap items-center gap-2 rounded-full px-3.5 py-2 text-xs font-semibold text-white">
           <Compass className="h-4 w-4 shrink-0" />
-          <span>
+          <span className="tabular-nums">
             {t(lang, 'nearestFound')}: {formatDistance(nearestTarget.totalDistanceM, lang)} ·{' '}
             {nearestTarget.mode === 'trail'
               ? t(lang, 'nearestAlongTrails')
@@ -395,7 +395,7 @@ export function App() {
           <button
             type="button"
             onClick={() => setNearestTarget(null)}
-            className="ml-1 rounded-full bg-blue-700 px-2 py-0.5 text-[11px] hover:bg-blue-800"
+            className="liquid-interactive ml-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] hover:bg-white/30"
           >
             {t(lang, 'cancelNearest')}
           </button>
@@ -404,15 +404,15 @@ export function App() {
 
       {/* Floating Action Buttons (GPS, Compass & Nearest) */}
       {!selectedItem && (
-        <div className="pointer-events-auto absolute bottom-8 left-3 z-20 flex flex-col gap-2 pb-[env(safe-area-inset-bottom)]">
+        <div className="pointer-events-auto absolute bottom-10 left-3 z-20 flex flex-col gap-2 pb-[env(safe-area-inset-bottom)]">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => startGps(true)}
-              className={`flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-xs font-semibold shadow-lg backdrop-blur-md transition ${
+              className={`liquid-interactive flex items-center gap-2 rounded-full px-3.5 py-2.5 text-xs font-semibold tabular-nums ${
                 userLocation
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white/95 text-slate-800 hover:bg-white'
+                  ? 'liquid-tint-blue text-white'
+                  : 'liquid-glass text-slate-800 hover:bg-white/80'
               }`}
             >
               <LocateFixed className="h-4 w-4" />
@@ -426,10 +426,10 @@ export function App() {
             <button
               type="button"
               onClick={toggleCompass}
-              className={`flex items-center gap-1.5 rounded-2xl px-3 py-2.5 text-xs font-semibold shadow-lg backdrop-blur-md transition ${
+              className={`liquid-interactive flex items-center gap-1.5 rounded-full px-3.5 py-2.5 text-xs font-semibold ${
                 compassEnabled
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-white/95 text-slate-800 hover:bg-white'
+                  ? 'liquid-tint-indigo text-white'
+                  : 'liquid-glass text-slate-800 hover:bg-white/80'
               }`}
               title={compassEnabled ? t(lang, 'compassOn') : t(lang, 'compassOff')}
             >
@@ -449,7 +449,7 @@ export function App() {
           <button
             type="button"
             onClick={() => setShowNearestPicker((v) => !v)}
-            className="flex w-fit items-center gap-2 rounded-2xl bg-emerald-800 px-3.5 py-2.5 text-xs font-semibold text-white shadow-lg hover:bg-emerald-900"
+            className="liquid-tint-emerald liquid-interactive flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white"
           >
             <Compass className="h-4 w-4" />
             <span>{t(lang, 'nearestBtn')}</span>
@@ -459,28 +459,28 @@ export function App() {
 
       {/* Nearest Category Picker Modal */}
       {showNearestPicker && (
-        <div className="pointer-events-auto absolute inset-x-3 bottom-24 z-30 mx-auto max-w-md rounded-3xl border border-slate-200 bg-white/98 p-4 shadow-2xl backdrop-blur-md">
-          <div className="mb-2.5 flex items-center justify-between">
-            <span className="text-sm font-bold text-slate-900">
+        <div className="liquid-glass-elevated animate-liquid-sheet pointer-events-auto absolute inset-x-3 bottom-24 z-30 mx-auto max-w-md rounded-[32px] p-4.5">
+          <div className="mb-3 flex items-center justify-between">
+            <span className="text-sm font-bold tracking-tight text-slate-900">
               {t(lang, 'nearestPrompt')}
             </span>
             <button
               type="button"
               onClick={() => setShowNearestPicker(false)}
-              className="rounded-full p-1 text-slate-400 hover:bg-slate-100"
+              className="liquid-interactive rounded-full bg-slate-900/8 p-1.5 text-slate-600 hover:bg-slate-900/14"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-2 gap-2">
             {CATEGORIES.filter((c) => (categoryCounts[c.id] || 0) > 0).map((cat) => (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => handleFindNearest(cat.id)}
-                className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-left text-xs font-medium text-slate-800 hover:border-emerald-600 hover:bg-emerald-50"
+                className="liquid-subcard liquid-interactive flex items-center gap-2 rounded-2xl px-3 py-2.5 text-left text-xs font-semibold text-slate-800 hover:bg-white/85"
               >
-                <span>{cat.emoji}</span>
+                <span className="text-sm">{cat.emoji}</span>
                 <span className="truncate">
                   {lang === 'en' ? cat.label_en : cat.label_it}
                 </span>
@@ -492,7 +492,7 @@ export function App() {
 
       {/* Attribution footer (compact) */}
       {!selectedItem && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-1 z-10 text-center text-[9px] text-slate-600/80">
+        <div className="pointer-events-none absolute inset-x-0 bottom-1.5 z-10 text-center text-[9px] font-medium text-slate-700/80 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
           {t(lang, 'attribution')}
         </div>
       )}

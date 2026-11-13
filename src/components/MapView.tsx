@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
-import { Protocol } from 'pmtiles';
+import { PMTiles, Protocol, Source } from 'pmtiles';
 import { CATEGORIES } from '../data/categories';
 import {
   CategoryId,
@@ -39,9 +39,27 @@ const INITIAL_CENTER: [number, number] = [8.2528, 45.2245];
 const INITIAL_ZOOM = 14.2;
 
 let pmtilesProtocolRegistered = false;
+let terrainBufferPromise: Promise<ArrayBuffer> | null = null;
+
 function ensurePmtilesProtocol(): void {
   if (pmtilesProtocolRegistered) return;
   const protocol = new Protocol();
+  const terrainSource: Source = {
+    getKey: () => '/data/terrain.pmtiles',
+    async getBytes(offset: number, length: number) {
+      if (!terrainBufferPromise) {
+        terrainBufferPromise = fetch('/data/terrain.pmtiles').then((res) => {
+          if (!res.ok) {
+            throw new Error(`Failed to load terrain.pmtiles: ${res.status}`);
+          }
+          return res.arrayBuffer();
+        });
+      }
+      const buf = await terrainBufferPromise;
+      return { data: buf.slice(offset, offset + length) };
+    },
+  };
+  protocol.add(new PMTiles(terrainSource));
   maplibregl.addProtocol('pmtiles', protocol.tile);
   pmtilesProtocolRegistered = true;
 }
@@ -145,7 +163,7 @@ export function MapView({
           },
           'terrain-dem': {
             type: 'raster-dem',
-            url: 'pmtiles:///data/terrain.pmtiles',
+            tiles: ['pmtiles:///data/terrain.pmtiles/{z}/{x}/{y}'],
             tileSize: 256,
             encoding: 'terrarium',
             minzoom: 11,
@@ -291,19 +309,20 @@ export function MapView({
         type: 'circle',
         source: 'pois',
         paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 9, 16, 13],
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 5, 14, 7.5, 16, 10],
           'circle-color': buildCategoryColorMatch(),
           'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 2.2,
+          'circle-stroke-width': 1.5,
         },
       });
       map.addLayer({
         id: 'pois-icon',
         type: 'symbol',
         source: 'pois',
+        minzoom: 13.5,
         layout: {
           'icon-image': ['concat', 'poi-icon-', ['get', 'categoria']],
-          'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.65, 16, 0.9],
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 13.5, 0.42, 16, 0.62],
           'icon-allow-overlap': true,
           'icon-ignore-placement': true,
         },
@@ -312,11 +331,11 @@ export function MapView({
         id: 'pois-label',
         type: 'symbol',
         source: 'pois',
-        minzoom: 14.5,
+        minzoom: 15,
         layout: {
           'text-field': ['get', lang === 'en' ? 'nome_en' : 'nome'],
           'text-size': 11,
-          'text-offset': [0, 1.7],
+          'text-offset': [0, 1.4],
           'text-anchor': 'top',
           'text-max-width': 10,
         },
@@ -590,8 +609,8 @@ export function MapView({
     map.setPaintProperty('pois-circle', 'circle-radius', [
       'case',
       ['==', ['get', 'id'], selectedId],
-      16,
-      ['interpolate', ['linear'], ['zoom'], 12, 9, 16, 13],
+      13,
+      ['interpolate', ['linear'], ['zoom'], 12, 5, 14, 7.5, 16, 10],
     ]);
   }, [selectedItem, mapLoaded]);
 
