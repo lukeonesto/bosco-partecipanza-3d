@@ -31,16 +31,18 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,geojson,json}'],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
-            // Cache elevation DEM tiles for offline 3D terrain
-            urlPattern: /^https:\/\/s3\.amazonaws\.com\/elevation-tiles-prod\/terrarium\/.*/i,
+            // Cache local 5m DTM PMTiles with HTTP Range support for offline 3D terrain
+            urlPattern: /\/data\/terrain\.pmtiles$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'terrain-dem-tiles',
+              rangeRequests: true,
               expiration: {
-                maxEntries: 600,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 60, // 60 days
               },
               cacheableResponse: {
                 statuses: [0, 200],

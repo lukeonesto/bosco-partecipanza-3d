@@ -20,15 +20,15 @@ export function CategoryFilterBar({
   counts,
 }: CategoryFilterBarProps) {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-[4.2rem] z-10 px-3 pt-[env(safe-area-inset-top)]">
+    <div className="pointer-events-none absolute inset-x-0 top-[4.35rem] z-10 px-3 pt-[env(safe-area-inset-top)]">
       <div className="no-scrollbar pointer-events-auto flex items-center gap-1.5 overflow-x-auto py-1">
         <button
           type="button"
           onClick={() => onSelectCategory('all')}
-          className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold shadow-sm backdrop-blur-md transition ${
+          className={`liquid-interactive shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold ${
             activeCategory === 'all'
-              ? 'bg-emerald-800 text-white'
-              : 'bg-white/90 text-slate-700 hover:bg-white'
+              ? 'liquid-tint-emerald text-white'
+              : 'liquid-glass text-slate-800 hover:bg-white/80'
           }`}
         >
           {t(lang, 'allCategories')}
@@ -37,10 +37,10 @@ export function CategoryFilterBar({
         <button
           type="button"
           onClick={onToggleTrails}
-          className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold shadow-sm backdrop-blur-md transition ${
+          className={`liquid-interactive shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold ${
             showTrails
-              ? 'bg-amber-700 text-white'
-              : 'bg-white/90 text-slate-600 hover:bg-white'
+              ? 'liquid-tint-amber text-white'
+              : 'liquid-glass text-slate-700 hover:bg-white/80'
           }`}
         >
           🥾 {t(lang, 'trails')}
@@ -54,18 +54,20 @@ export function CategoryFilterBar({
               key={cat.id}
               type="button"
               onClick={() => onSelectCategory(isActive ? 'all' : cat.id)}
-              className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium shadow-sm backdrop-blur-md transition ${
+              className={`liquid-interactive flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold ${
                 isActive
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-white/90 text-slate-700 hover:bg-white'
+                  ? 'liquid-tint-dark text-white'
+                  : 'liquid-glass text-slate-800 hover:bg-white/80'
               }`}
             >
               <span>{cat.emoji}</span>
               <span>{lang === 'en' ? cat.label_en : cat.label_it}</span>
               {count > 0 && (
                 <span
-                  className={`ml-0.5 rounded-full px-1.5 text-[10px] ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-200/80 text-slate-600'
+                  className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold tabular-nums ${
+                    isActive
+                      ? 'bg-white/20 text-white'
+                      : 'bg-slate-900/8 text-slate-600'
                   }`}
                 >
                   {count}

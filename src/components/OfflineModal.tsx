@@ -99,15 +99,15 @@ export function OfflineModal({
       : t(lang, 'offlineNotDownloaded');
 
   return (
-    <div className="pointer-events-auto fixed inset-0 z-50 flex items-end justify-center bg-slate-900/45 p-3 backdrop-blur-xs sm:items-center">
-      <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl">
+    <div className="pointer-events-auto fixed inset-0 z-50 flex items-end justify-center bg-slate-950/35 p-3 backdrop-blur-sm sm:items-center">
+      <div className="liquid-glass-elevated animate-liquid-sheet w-full max-w-md rounded-[32px] p-5">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <div
-              className={`flex h-10 w-10 items-center justify-center rounded-2xl ${
+              className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
                 status?.isComplete
-                  ? 'bg-emerald-100 text-emerald-700'
-                  : 'bg-slate-100 text-slate-700'
+                  ? 'liquid-tint-emerald text-white'
+                  : 'liquid-subcard text-slate-700'
               }`}
             >
               {status?.isComplete ? (
@@ -117,7 +117,7 @@ export function OfflineModal({
               )}
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">
+              <h2 className="text-base font-bold tracking-tight text-slate-900">
                 {t(lang, 'offlineModeTitle')}
               </h2>
               <p
@@ -138,7 +138,7 @@ export function OfflineModal({
             type="button"
             onClick={onClose}
             aria-label={t(lang, 'close')}
-            className="rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
+            className="liquid-interactive rounded-full bg-slate-900/8 p-2 text-slate-600 hover:bg-slate-900/14 hover:text-slate-900"
           >
             <X className="h-4 w-4" />
           </button>
@@ -149,10 +149,10 @@ export function OfflineModal({
         </p>
 
         {/* Stats & Progress */}
-        <div className="mt-4 rounded-2xl bg-slate-50 p-3.5">
+        <div className="liquid-subcard mt-4 rounded-2xl p-3.5">
           <div className="flex items-center justify-between text-xs font-medium text-slate-700">
             <span>{t(lang, 'offlineTilesLabel')}</span>
-            <span className="font-bold text-slate-900">
+            <span className="font-bold tabular-nums text-slate-900">
               {downloading && progress
                 ? `${progress.done} / ${progress.total}`
                 : `${status?.cachedCount ?? 0} / ${status?.totalCount ?? OFFLINE_TOTAL_TILES}`}{' '}
@@ -160,9 +160,9 @@ export function OfflineModal({
             </span>
           </div>
 
-          <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-slate-200">
+          <div className="mt-2.5 h-2.5 w-full overflow-hidden rounded-full bg-slate-900/10">
             <div
-              className={`h-full rounded-full transition-all duration-200 ${
+              className={`h-full rounded-full transition-all duration-300 ${
                 status?.isComplete ? 'bg-emerald-600' : 'bg-blue-600'
               }`}
               style={{ width: `${pct}%` }}
@@ -187,14 +187,14 @@ export function OfflineModal({
         </div>
 
         {!isOnline && (
-          <div className="mt-3 flex items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
+          <div className="mt-3 flex items-center gap-2 rounded-2xl border border-amber-200/80 bg-amber-500/10 px-3.5 py-2.5 text-xs font-medium text-amber-800">
             <WifiOff className="h-4 w-4 shrink-0" />
             <span>{t(lang, 'offlineNeedOnline')}</span>
           </div>
         )}
 
         {failedCount > 0 && (
-          <div className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
+          <div className="mt-3 rounded-2xl border border-red-200/80 bg-red-500/10 px-3.5 py-2.5 text-xs font-medium text-red-700">
             {t(lang, 'offlineFailedNote')} ({failedCount})
           </div>
         )}
@@ -204,7 +204,7 @@ export function OfflineModal({
             <button
               type="button"
               onClick={handleCancel}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-slate-200 px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-300"
+              className="liquid-glass liquid-interactive flex flex-1 items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-white/80"
             >
               <X className="h-4 w-4" />
               <span>{t(lang, 'offlineCancelBtn')}</span>
@@ -214,7 +214,7 @@ export function OfflineModal({
               type="button"
               disabled={!isOnline}
               onClick={handleDownload}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-emerald-800 px-4 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-50"
+              className="liquid-tint-emerald liquid-interactive flex flex-1 items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               {status?.isComplete ? (
                 <RefreshCw className="h-4 w-4" />
@@ -233,7 +233,7 @@ export function OfflineModal({
             <button
               type="button"
               onClick={handleClear}
-              className="flex items-center justify-center gap-1.5 rounded-2xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-red-50 hover:text-red-700"
+              className="liquid-glass liquid-interactive flex items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-semibold text-red-600 hover:bg-red-50/70"
             >
               <Trash2 className="h-4 w-4" />
               <span>{t(lang, 'offlineClearBtn')}</span>

@@ -63,15 +63,17 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
   };
 
   return (
-    <div className="pointer-events-auto fixed inset-0 z-50 flex items-end justify-center bg-slate-900/45 p-3 backdrop-blur-xs sm:items-center">
+    <div className="pointer-events-auto fixed inset-0 z-50 flex items-end justify-center bg-slate-950/35 p-3 backdrop-blur-sm sm:items-center">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl"
+        className="liquid-glass-elevated animate-liquid-sheet w-full max-w-md rounded-[32px] p-5"
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-emerald-700" />
-            <h2 className="text-base font-bold text-slate-900">
+          <div className="flex items-center gap-2.5">
+            <div className="liquid-tint-emerald flex h-9 w-9 items-center justify-center rounded-2xl text-white">
+              <MapPin className="h-4 w-4" />
+            </div>
+            <h2 className="text-base font-bold tracking-tight text-slate-900">
               {t(lang, 'fieldNewPoiTitle')}
             </h2>
           </div>
@@ -79,17 +81,17 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
             type="button"
             onClick={onClose}
             aria-label={t(lang, 'close')}
-            className="rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
+            className="liquid-interactive rounded-full bg-slate-900/8 p-2 text-slate-600 hover:bg-slate-900/14 hover:text-slate-900"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="mt-2 rounded-xl bg-slate-50 px-3 py-1.5 text-[11px] font-mono text-slate-600">
+        <div className="liquid-subcard mt-3 rounded-2xl px-3.5 py-2 text-[11px] font-mono tabular-nums text-slate-600">
           {t(lang, 'fieldCoords')}: {coords[1].toFixed(5)}, {coords[0].toFixed(5)}
         </div>
 
-        <div className="mt-3">
+        <div className="mt-3.5">
           <label className="text-xs font-semibold text-slate-700">
             {t(lang, 'fieldCategory')}
           </label>
@@ -99,10 +101,10 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
                 key={cat.id}
                 type="button"
                 onClick={() => setCategory(cat.id)}
-                className={`flex items-center gap-1 rounded-xl border px-2 py-1.5 text-left text-[11px] font-medium transition ${
+                className={`liquid-interactive flex items-center gap-1 rounded-2xl px-2.5 py-1.5 text-left text-[11px] font-semibold ${
                   category === cat.id
-                    ? 'border-emerald-700 bg-emerald-50 text-emerald-900'
-                    : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+                    ? 'liquid-tint-emerald text-white'
+                    : 'liquid-subcard text-slate-700 hover:bg-white/80'
                 }`}
               >
                 <span>{cat.emoji}</span>
@@ -114,7 +116,7 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
           </div>
         </div>
 
-        <div className="mt-3">
+        <div className="mt-3.5">
           <label className="text-xs font-semibold text-slate-700">
             {t(lang, 'fieldPoiName')}
           </label>
@@ -123,7 +125,7 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={t(lang, 'fieldPoiNamePlaceholder')}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+            className="liquid-input mt-1 w-full rounded-2xl px-3.5 py-2 text-sm text-slate-900 placeholder:text-slate-400"
           />
         </div>
 
@@ -136,13 +138,13 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder={t(lang, 'fieldPoiDescPlaceholder')}
-            className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+            className="liquid-input mt-1 w-full rounded-2xl px-3.5 py-2 text-sm text-slate-900 placeholder:text-slate-400"
           />
         </div>
 
         <button
           type="submit"
-          className="mt-4 w-full rounded-2xl bg-emerald-800 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-900"
+          className="liquid-tint-emerald liquid-interactive mt-4 w-full rounded-full py-2.5 text-sm font-semibold text-white"
         >
           {t(lang, 'fieldSavePoi')}
         </button>

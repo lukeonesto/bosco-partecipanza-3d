@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
+import { Protocol } from 'pmtiles';
 import { CATEGORIES } from '../data/categories';
 import {
   CategoryId,
@@ -36,6 +37,14 @@ interface MapViewProps {
 // Center of Bosco delle Sorti della Partecipanza (Trino Vercellese)
 const INITIAL_CENTER: [number, number] = [8.2528, 45.2245];
 const INITIAL_ZOOM = 14.2;
+
+let pmtilesProtocolRegistered = false;
+function ensurePmtilesProtocol(): void {
+  if (pmtilesProtocolRegistered) return;
+  const protocol = new Protocol();
+  maplibregl.addProtocol('pmtiles', protocol.tile);
+  pmtilesProtocolRegistered = true;
+}
 
 function buildCategoryColorMatch(): maplibregl.ExpressionSpecification {
   const expr: unknown[] = ['match', ['get', 'categoria']];
@@ -112,6 +121,8 @@ export function MapView({
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
+    ensurePmtilesProtocol();
+
     const map = new maplibregl.Map({
       container: containerRef.current,
       center: INITIAL_CENTER,
@@ -134,13 +145,13 @@ export function MapView({
           },
           'terrain-dem': {
             type: 'raster-dem',
-            tiles: [
-              'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
-            ],
+            url: 'pmtiles:///data/terrain.pmtiles',
             tileSize: 256,
             encoding: 'terrarium',
+            minzoom: 11,
             maxzoom: 15,
-            attribution: 'Terrain: AWS Open Data / Mapzen',
+            bounds: [8.215, 45.200, 8.310, 45.250],
+            attribution: 'DTM 5m © Regione Piemonte (CC BY 4.0)',
           },
         },
         layers: [

@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "fetch-osm": "python3 scripts/fetch_osm.py"
+    "fetch-osm": "python3 scripts/fetch_osm.py",
+    "fetch-dtm": "python3 scripts/fetch_piemonte_dtm.py"
   },
   "dependencies": {
     "lucide-react": "^0.475.0",

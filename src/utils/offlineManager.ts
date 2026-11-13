@@ -13,8 +13,6 @@ const BOSCO_BOUNDS = {
 
 const OSM_MIN_ZOOM = 12;
 const OSM_MAX_ZOOM = 16;
-const DEM_MIN_ZOOM = 12;
-const DEM_MAX_ZOOM = 15;
 
 interface TileTask {
   url: string;
@@ -47,18 +45,10 @@ function buildTileTasks(): TileTask[] {
     }
   }
 
-  for (let z = DEM_MIN_ZOOM; z <= DEM_MAX_ZOOM; z++) {
-    const nw = deg2num(BOSCO_BOUNDS.maxLat, BOSCO_BOUNDS.minLon, z);
-    const se = deg2num(BOSCO_BOUNDS.minLat, BOSCO_BOUNDS.maxLon, z);
-    for (let x = nw.x; x <= se.x; x++) {
-      for (let y = nw.y; y <= se.y; y++) {
-        tasks.push({
-          url: `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`,
-          cacheName: DEM_CACHE_NAME,
-        });
-      }
-    }
-  }
+  tasks.push({
+    url: '/data/terrain.pmtiles',
+    cacheName: DEM_CACHE_NAME,
+  });
 
   for (const dataUrl of [
     '/data/pois.geojson',

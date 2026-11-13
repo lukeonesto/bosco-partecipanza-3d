@@ -68,33 +68,35 @@ export function DetailSheet({
     const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=walking`;
 
     return (
-      <div className="pointer-events-auto absolute inset-x-0 bottom-0 z-30 mx-auto max-w-xl rounded-t-3xl border-t border-slate-200 bg-white/98 p-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl backdrop-blur-md">
-        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-300" />
+      <div className="liquid-glass-elevated animate-liquid-sheet pointer-events-auto absolute inset-x-0 bottom-0 z-30 mx-auto max-w-xl rounded-t-[32px] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:bottom-3 sm:rounded-[32px]">
+        <div className="mx-auto mb-3.5 h-1.5 w-10 rounded-full bg-slate-900/15" />
 
         <div className="flex items-start justify-between gap-3">
           <div>
             <span
-              className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold text-white"
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold text-white shadow-sm ring-1 ring-white/30"
               style={{ backgroundColor: cat.color }}
             >
               <span>{cat.emoji}</span>
               <span>{getCategoryLabel(properties.categoria, lang)}</span>
             </span>
-            <h2 className="mt-1.5 text-lg font-bold text-slate-900">{title}</h2>
+            <h2 className="mt-2 text-lg font-bold tracking-tight text-slate-900">
+              {title}
+            </h2>
           </div>
 
           <button
             type="button"
             onClick={onClose}
             aria-label={t(lang, 'close')}
-            className="rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
+            className="liquid-interactive rounded-full bg-slate-900/8 p-2 text-slate-600 hover:bg-slate-900/14 hover:text-slate-900"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {dist !== null && (
-          <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+          <div className="liquid-subcard mt-2.5 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tabular-nums text-blue-700">
             <Navigation className="h-3.5 w-3.5" />
             <span>
               {t(lang, 'distanceFromYou')}: {formatDistance(dist, lang)}
@@ -106,9 +108,9 @@ export function DetailSheet({
 
         {/* Photos (online only as requested) */}
         {photos.length > 0 && (
-          <div className="mt-3">
+          <div className="mt-3.5">
             {isOnline ? (
-              <div className="flex gap-2 overflow-x-auto pb-1">
+              <div className="no-scrollbar flex gap-2.5 overflow-x-auto pb-1">
                 {photos.map((photo, idx) => (
                   <img
                     key={idx}
@@ -121,12 +123,12 @@ export function DetailSheet({
                       )
                     }
                     loading="lazy"
-                    className="h-32 w-48 shrink-0 rounded-xl object-cover"
+                    className="h-32 w-48 shrink-0 rounded-2xl object-cover shadow-md ring-1 ring-white/60"
                   />
                 ))}
               </div>
             ) : (
-              <div className="flex items-center gap-2 rounded-xl bg-slate-100 px-3 py-2 text-xs text-slate-500">
+              <div className="liquid-subcard flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-xs font-medium text-slate-600">
                 <WifiOff className="h-4 w-4 shrink-0" />
                 <span>{t(lang, 'onlineOnlyPhotos')}</span>
               </div>
@@ -134,7 +136,7 @@ export function DetailSheet({
           </div>
         )}
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3 text-xs text-slate-500">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-900/8 pt-3.5 text-xs text-slate-500">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
@@ -149,7 +151,7 @@ export function DetailSheet({
             href={mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-800 px-3 py-1.5 font-semibold text-white hover:bg-emerald-900"
+            className="liquid-tint-emerald liquid-interactive inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white"
           >
             <span>{t(lang, 'openInMaps')}</span>
             <ExternalLink className="h-3.5 w-3.5" />
@@ -169,51 +171,55 @@ export function DetailSheet({
   );
 
   return (
-    <div className="pointer-events-auto absolute inset-x-0 bottom-0 z-30 mx-auto max-w-xl rounded-t-3xl border-t border-slate-200 bg-white/98 p-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl backdrop-blur-md">
-      <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-300" />
+    <div className="liquid-glass-elevated animate-liquid-sheet pointer-events-auto absolute inset-x-0 bottom-0 z-30 mx-auto max-w-xl rounded-t-[32px] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:bottom-3 sm:rounded-[32px]">
+      <div className="mx-auto mb-3.5 h-1.5 w-10 rounded-full bg-slate-900/15" />
 
       <div className="flex items-start justify-between gap-3">
         <div>
-          <span className="inline-flex items-center gap-1 rounded-full bg-amber-700 px-2.5 py-0.5 text-xs font-semibold text-white">
+          <span className="liquid-tint-amber inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold text-white">
             🥾 {t(lang, 'trailLabel')}
           </span>
-          <h2 className="mt-1.5 text-lg font-bold text-slate-900">{title}</h2>
+          <h2 className="mt-2 text-lg font-bold tracking-tight text-slate-900">
+            {title}
+          </h2>
         </div>
 
         <button
           type="button"
           onClick={onClose}
           aria-label={t(lang, 'close')}
-          className="rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
+          className="liquid-interactive rounded-full bg-slate-900/8 p-2 text-slate-600 hover:bg-slate-900/14 hover:text-slate-900"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        <div className="rounded-xl bg-amber-50 p-2.5 text-center">
-          <div className="flex items-center justify-center gap-1 text-[11px] text-amber-800">
+      <div className="mt-3.5 grid grid-cols-3 gap-2">
+        <div className="liquid-subcard rounded-2xl p-2.5 text-center">
+          <div className="flex items-center justify-center gap-1 text-[11px] font-medium text-amber-800">
             <Ruler className="h-3.5 w-3.5" />
             <span>{t(lang, 'length')}</span>
           </div>
-          <div className="mt-0.5 text-sm font-bold text-amber-950">
+          <div className="mt-0.5 text-sm font-bold tabular-nums text-amber-950">
             {formatDistance(properties.lunghezza_m, lang)}
           </div>
         </div>
 
-        <div className="rounded-xl bg-amber-50 p-2.5 text-center">
-          <div className="flex items-center justify-center gap-1 text-[11px] text-amber-800">
+        <div className="liquid-subcard rounded-2xl p-2.5 text-center">
+          <div className="flex items-center justify-center gap-1 text-[11px] font-medium text-amber-800">
             <Clock className="h-3.5 w-3.5" />
             <span>{t(lang, 'duration')}</span>
           </div>
-          <div className="mt-0.5 text-sm font-bold text-amber-950">
+          <div className="mt-0.5 text-sm font-bold tabular-nums text-amber-950">
             {formatDuration(properties.tempo_percorrenza_min, lang)}
           </div>
         </div>
 
-        <div className="rounded-xl bg-slate-100 p-2.5 text-center">
-          <div className="text-[11px] text-slate-600">{t(lang, 'surface')}</div>
-          <div className="mt-0.5 truncate text-xs font-semibold text-slate-900">
+        <div className="liquid-subcard rounded-2xl p-2.5 text-center">
+          <div className="text-[11px] font-medium text-slate-500">
+            {t(lang, 'surface')}
+          </div>
+          <div className="mt-0.5 truncate text-xs font-bold text-slate-900">
             {properties.fondo || '-'}
           </div>
         </div>
@@ -223,12 +229,12 @@ export function DetailSheet({
 
       {trailReport && (
         <div
-          className={`mt-3 flex items-start gap-2 rounded-xl px-3 py-2 text-xs font-medium ${
+          className={`mt-3 flex items-start gap-2 rounded-2xl border px-3.5 py-2.5 text-xs font-medium ${
             trailReport.status === 'chiuso'
-              ? 'bg-red-50 text-red-800'
+              ? 'border-red-200/80 bg-red-500/10 text-red-800'
               : trailReport.status === 'attenzione'
-                ? 'bg-amber-50 text-amber-800'
-                : 'bg-emerald-50 text-emerald-800'
+                ? 'border-amber-200/80 bg-amber-500/10 text-amber-800'
+                : 'border-emerald-200/80 bg-emerald-500/10 text-emerald-800'
           }`}
         >
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -247,24 +253,24 @@ export function DetailSheet({
       )}
 
       {fieldMode && (
-        <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-          <div className="text-xs font-semibold text-slate-700">
+        <div className="liquid-subcard mt-3.5 rounded-2xl p-3.5">
+          <div className="text-xs font-semibold text-slate-800">
             {t(lang, 'trailStatusLabel')}
           </div>
-          <div className="mt-1.5 flex gap-1.5">
+          <div className="mt-2 flex gap-1.5">
             {(['aperto', 'attenzione', 'chiuso'] as TrailStatus[]).map((st) => (
               <button
                 key={st}
                 type="button"
                 onClick={() => setStatusDraft(st)}
-                className={`flex-1 rounded-xl border px-2 py-1.5 text-[11px] font-semibold transition ${
+                className={`liquid-interactive flex-1 rounded-full px-2.5 py-1.5 text-[11px] font-semibold ${
                   statusDraft === st
                     ? st === 'chiuso'
-                      ? 'border-red-600 bg-red-600 text-white'
+                      ? 'liquid-tint-red text-white'
                       : st === 'attenzione'
-                        ? 'border-amber-500 bg-amber-500 text-white'
-                        : 'border-emerald-700 bg-emerald-700 text-white'
-                    : 'border-slate-200 bg-white text-slate-700'
+                        ? 'liquid-tint-amber text-white'
+                        : 'liquid-tint-emerald text-white'
+                    : 'liquid-glass text-slate-700'
                 }`}
               >
                 {st === 'chiuso'
@@ -275,13 +281,13 @@ export function DetailSheet({
               </button>
             ))}
           </div>
-          <div className="mt-2 flex gap-2">
+          <div className="mt-2.5 flex gap-2">
             <input
               type="text"
               value={noteDraft}
               onChange={(e) => setNoteDraft(e.target.value)}
               placeholder={t(lang, 'trailStatusNotePlaceholder')}
-              className="flex-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs focus:border-emerald-600 focus:outline-none"
+              className="liquid-input flex-1 rounded-full px-3.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400"
             />
             <button
               type="button"
@@ -294,7 +300,7 @@ export function DetailSheet({
                   updatedAt: new Date().toISOString(),
                 })
               }
-              className="rounded-xl bg-emerald-800 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-900"
+              className="liquid-tint-emerald liquid-interactive rounded-full px-4 py-1.5 text-xs font-semibold text-white"
             >
               {t(lang, 'trailStatusSave')}
             </button>
@@ -302,7 +308,7 @@ export function DetailSheet({
         </div>
       )}
 
-      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs text-slate-500">
+      <div className="mt-4 flex items-center justify-between border-t border-slate-900/8 pt-3.5 text-xs text-slate-500">
         <span className="inline-flex items-center gap-1">
           <Calendar className="h-3.5 w-3.5" />
           {t(lang, 'lastUpdated')}: {properties.aggiornato_il}
