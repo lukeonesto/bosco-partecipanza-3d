@@ -70,6 +70,7 @@ export function App() {
     loadTrailReports()
   );
   const [draftPoiCoords, setDraftPoiCoords] = useState<[number, number] | null>(null);
+  const [editingPoi, setEditingPoi] = useState<PoiFeature | null>(null);
   const [showFieldDrafts, setShowFieldDrafts] = useState(false);
 
   const [isOnline, setIsOnline] = useState(
@@ -233,12 +234,16 @@ export function App() {
     applyNearestResult(userLocation, category);
   };
 
-  const handleSaveCustomPoi = (newPoi: PoiFeature) => {
-    const updated = [...customPois, newPoi];
+  const handleSaveCustomPoi = (savedPoi: PoiFeature) => {
+    const exists = customPois.some((p) => p.properties.id === savedPoi.properties.id);
+    const updated = exists
+      ? customPois.map((p) => (p.properties.id === savedPoi.properties.id ? savedPoi : p))
+      : [...customPois, savedPoi];
     setCustomPois(updated);
     saveCustomPois(updated);
     setDraftPoiCoords(null);
-    setSelectedItem({ kind: 'poi', feature: newPoi });
+    setEditingPoi(null);
+    setSelectedItem({ kind: 'poi', feature: savedPoi });
   };
 
   const handleDeleteCustomPoi = (id: string) => {
@@ -509,6 +514,10 @@ export function App() {
             : undefined
         }
         onSaveTrailReport={handleSaveTrailReport}
+        onEditPoi={(poi) => {
+          setEditingPoi(poi);
+          setDraftPoiCoords(null);
+        }}
         onClose={() => setSelectedItem(null)}
       />
 
@@ -522,8 +531,12 @@ export function App() {
 
       <AddPoiModal
         coords={draftPoiCoords}
+        editingPoi={editingPoi}
         lang={lang}
-        onClose={() => setDraftPoiCoords(null)}
+        onClose={() => {
+          setDraftPoiCoords(null);
+          setEditingPoi(null);
+        }}
         onSave={handleSaveCustomPoi}
       />
 

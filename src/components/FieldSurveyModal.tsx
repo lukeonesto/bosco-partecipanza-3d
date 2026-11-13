@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Check,
   ClipboardCopy,
   Download,
+  ExternalLink,
   MapPin,
   Trash2,
   X,
@@ -20,17 +21,37 @@ import { downloadJsonFile } from '../utils/fieldStorage';
 
 interface AddPoiModalProps {
   coords: [number, number] | null;
+  editingPoi?: PoiFeature | null;
   lang: Language;
   onClose: () => void;
   onSave: (poi: PoiFeature) => void;
 }
 
-export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps) {
+export function AddPoiModal({
+  coords,
+  editingPoi,
+  lang,
+  onClose,
+  onSave,
+}: AddPoiModalProps) {
   const [category, setCategory] = useState<CategoryId>('panchina');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  if (!coords) return null;
+  useEffect(() => {
+    if (editingPoi) {
+      setCategory(editingPoi.properties.categoria);
+      setName(editingPoi.properties.nome);
+      setDescription(editingPoi.properties.descrizione);
+    } else {
+      setCategory('panchina');
+      setName('');
+      setDescription('');
+    }
+  }, [editingPoi, coords]);
+
+  const effectiveCoords = editingPoi?.geometry.coordinates ?? coords;
+  if (!effectiveCoords) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,26 +59,28 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
     const fallbackName = lang === 'en' ? cat?.label_en : cat?.label_it;
     const today = new Date().toISOString().slice(0, 10);
 
-    const newPoi: PoiFeature = {
+    const savedPoi: PoiFeature = {
       type: 'Feature',
       geometry: {
         type: 'Point',
         coordinates: [
-          Number(coords[0].toFixed(6)),
-          Number(coords[1].toFixed(6)),
+          Number(effectiveCoords[0].toFixed(6)),
+          Number(effectiveCoords[1].toFixed(6)),
         ],
       },
       properties: {
-        id: `field-${Date.now()}`,
+        ...(editingPoi?.properties ?? {}),
+        id: editingPoi?.properties.id ?? `field-${Date.now()}`,
         nome: name.trim() || fallbackName || 'Nuovo POI',
         categoria: category,
-        descrizione: description.trim() || 'Rilevato durante sopralluogo sul campo.',
+        descrizione:
+          description.trim() || 'Rilevato durante sopralluogo sul campo.',
         aggiornato_il: today,
         fonte: 'Sopralluogo',
       },
     };
 
-    onSave(newPoi);
+    onSave(savedPoi);
     setName('');
     setDescription('');
   };
@@ -74,7 +97,7 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
               <MapPin className="h-4 w-4" />
             </div>
             <h2 className="text-base font-bold tracking-tight text-slate-900">
-              {t(lang, 'fieldNewPoiTitle')}
+              {editingPoi ? t(lang, 'fieldEditPoiTitle') : t(lang, 'fieldNewPoiTitle')}
             </h2>
           </div>
           <button
@@ -88,7 +111,8 @@ export function AddPoiModal({ coords, lang, onClose, onSave }: AddPoiModalProps)
         </div>
 
         <div className="liquid-subcard mt-3 rounded-2xl px-3.5 py-2 text-[11px] font-mono tabular-nums text-slate-600">
-          {t(lang, 'fieldCoords')}: {coords[1].toFixed(5)}, {coords[0].toFixed(5)}
+          {t(lang, 'fieldCoords')}: {effectiveCoords[1].toFixed(5)},{' '}
+          {effectiveCoords[0].toFixed(5)}
         </div>
 
         <div className="mt-3.5">
@@ -192,6 +216,20 @@ export function FieldDraftsModal({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const buildGithubIssueUrl = () => {
+    const title = `Sopralluogo: ${customPois.length} POI, ${reportList.length} sentieri`;
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      customPois,
+      trailReports: reportList,
+    };
+    const jsonStr = JSON.stringify(payload, null, 2).slice(0, 5500);
+    const body = `### Segnalazione dal campo (Bosco della Partecipanza 3D)\n\n\`\`\`json\n${jsonStr}\n\`\`\`\n`;
+    return `https://github.com/lukeonesto/bosco-partecipanza-3d/issues/new?title=${encodeURIComponent(
+      title
+    )}&body=${encodeURIComponent(body)}`;
+  };
+
   return (
     <div className="pointer-events-auto fixed inset-0 z-50 flex items-end justify-center bg-slate-950/35 p-3 backdrop-blur-sm sm:items-center">
       <div className="liquid-glass-elevated animate-liquid-sheet w-full max-w-md rounded-[32px] p-5">
@@ -261,6 +299,16 @@ export function FieldDraftsModal({
 
         {hasDrafts && (
           <div className="mt-4 flex flex-col gap-2">
+            <a
+              href={buildGithubIssueUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="liquid-interactive flex items-center justify-center gap-1.5 rounded-full bg-slate-900 py-2.5 text-xs font-semibold text-white hover:bg-slate-800"
+            >
+              <ExternalLink className="h-4 w-4" />
+              <span>{t(lang, 'fieldSendGithub')}</span>
+            </a>
+
             <button
               type="button"
               onClick={() => downloadJsonFile('pois.geojson', mergedPois)}

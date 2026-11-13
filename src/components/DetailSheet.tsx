@@ -8,10 +8,11 @@ import {
   WifiOff,
   ExternalLink,
   AlertTriangle,
+  Pencil,
 } from 'lucide-react';
 import { CATEGORY_MAP, getCategoryLabel } from '../data/categories';
 import { getLocalizedText, t } from '../i18n';
-import { Language, SelectedItem, TrailReport, TrailStatus } from '../types';
+import { Language, PoiFeature, SelectedItem, TrailReport, TrailStatus } from '../types';
 import {
   formatDistance,
   formatDuration,
@@ -26,6 +27,7 @@ interface DetailSheetProps {
   fieldMode: boolean;
   trailReport?: TrailReport;
   onSaveTrailReport: (report: TrailReport) => void;
+  onEditPoi?: (poi: PoiFeature) => void;
   onClose: () => void;
 }
 
@@ -37,6 +39,7 @@ export function DetailSheet({
   fieldMode,
   trailReport,
   onSaveTrailReport,
+  onEditPoi,
   onClose,
 }: DetailSheetProps) {
   const [statusDraft, setStatusDraft] = useState<TrailStatus>(
@@ -147,15 +150,28 @@ export function DetailSheet({
             </span>
           </div>
 
-          <a
-            href={mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="liquid-tint-emerald liquid-interactive inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white"
-          >
-            <span>{t(lang, 'openInMaps')}</span>
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+          <div className="flex items-center gap-2">
+            {fieldMode && onEditPoi && (
+              <button
+                type="button"
+                onClick={() => onEditPoi(item.feature)}
+                className="liquid-interactive inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900 hover:bg-amber-100"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+                <span>{t(lang, 'fieldEditPoiBtn')}</span>
+              </button>
+            )}
+
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="liquid-tint-emerald liquid-interactive inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white"
+            >
+              <span>{t(lang, 'openInMaps')}</span>
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
         </div>
       </div>
     );
