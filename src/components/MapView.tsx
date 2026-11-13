@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { CATEGORIES } from '../data/categories';
 import {
@@ -70,7 +70,7 @@ export function MapView({
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
-  const loadedRef = useRef(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const onSelectRef = useRef(onSelectItem);
   onSelectRef.current = onSelectItem;
   const onDisableCompassRef = useRef(onDisableCompass);
@@ -79,6 +79,12 @@ export function MapView({
   fieldModeRef.current = fieldMode;
   const onMapClickForPoiRef = useRef(onMapClickForPoi);
   onMapClickForPoiRef.current = onMapClickForPoi;
+  const poisRef = useRef(pois);
+  poisRef.current = pois;
+  const trailsRef = useRef(trails);
+  trailsRef.current = trails;
+  const boundaryRef = useRef(boundary);
+  boundaryRef.current = boundary;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -160,11 +166,9 @@ export function MapView({
     );
 
     map.on('load', () => {
-      loadedRef.current = true;
-
       map.addSource('boundary', {
         type: 'geojson',
-        data: boundary,
+        data: boundaryRef.current,
       });
       map.addLayer({
         id: 'boundary-fill',
@@ -190,7 +194,7 @@ export function MapView({
 
       map.addSource('trails', {
         type: 'geojson',
-        data: trails,
+        data: trailsRef.current,
       });
       map.addLayer({
         id: 'trails-casing',
@@ -244,7 +248,7 @@ export function MapView({
 
       map.addSource('pois', {
         type: 'geojson',
-        data: pois,
+        data: poisRef.current,
       });
       map.addLayer({
         id: 'pois-circle',
@@ -306,7 +310,9 @@ export function MapView({
       map.on('click', 'pois-circle', (e) => {
         const feat = e.features?.[0];
         if (!feat) return;
-        const poi = pois.features.find((p) => p.properties.id === feat.properties?.id);
+        const poi = poisRef.current.features.find(
+          (p) => p.properties.id === feat.properties?.id
+        );
         if (poi) {
           onSelectRef.current({ kind: 'poi', feature: poi });
           map.easeTo({
@@ -323,7 +329,9 @@ export function MapView({
 
         const feat = e.features?.[0];
         if (!feat) return;
-        const trail = trails.features.find((t) => t.properties.id === feat.properties?.id);
+        const trail = trailsRef.current.features.find(
+          (t) => t.properties.id === feat.properties?.id
+        );
         if (trail) {
           onSelectRef.current({ kind: 'trail', feature: trail });
         }
@@ -356,6 +364,8 @@ export function MapView({
           onDisableCompassRef.current();
         }
       });
+
+      setMapLoaded(true);
     });
 
     mapRef.current = map;
@@ -363,7 +373,7 @@ export function MapView({
     return () => {
       map.remove();
       mapRef.current = null;
-      loadedRef.current = false;
+      setMapLoaded(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -371,26 +381,26 @@ export function MapView({
   // Update GeoJSON data sources when loaded asynchronously
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     (map.getSource('pois') as maplibregl.GeoJSONSource | undefined)?.setData(pois);
-  }, [pois]);
+  }, [pois, mapLoaded]);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     (map.getSource('trails') as maplibregl.GeoJSONSource | undefined)?.setData(trails);
-  }, [trails]);
+  }, [trails, mapLoaded]);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     (map.getSource('boundary') as maplibregl.GeoJSONSource | undefined)?.setData(boundary);
-  }, [boundary]);
+  }, [boundary, mapLoaded]);
 
   // Filter POIs by category and search query
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
 
     const q = searchQuery.trim().toLowerCase();
     const matchingIds = pois.features
@@ -413,35 +423,35 @@ export function MapView({
     ];
     map.setFilter('pois-circle', filterExpr);
     map.setFilter('pois-label', filterExpr);
-  }, [pois, activeCategory, searchQuery, lang]);
+  }, [pois, activeCategory, searchQuery, lang, mapLoaded]);
 
   // Toggle trails visibility
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     const vis = showTrails ? 'visible' : 'none';
     for (const id of ['trails-casing', 'trails-line', 'trails-hit']) {
       if (map.getLayer(id)) {
         map.setLayoutProperty(id, 'visibility', vis);
       }
     }
-  }, [showTrails]);
+  }, [showTrails, mapLoaded]);
 
   // Update label language
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current || !map.getLayer('pois-label')) return;
+    if (!map || !mapLoaded || !map.getLayer('pois-label')) return;
     map.setLayoutProperty('pois-label', 'text-field', [
       'coalesce',
       ['get', lang === 'en' ? 'nome_en' : 'nome'],
       ['get', 'nome'],
     ]);
-  }, [lang]);
+  }, [lang, mapLoaded]);
 
   // Toggle 3D / exaggeration
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     if (is3D) {
       map.setTerrain({ source: 'terrain-dem', exaggeration });
       if (map.getPitch() < 25) {
@@ -451,12 +461,12 @@ export function MapView({
       map.setTerrain(null);
       map.easeTo({ pitch: 0, bearing: 0, duration: 500 });
     }
-  }, [is3D, exaggeration]);
+  }, [is3D, exaggeration, mapLoaded]);
 
   // Update user GPS marker
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     const src = map.getSource('user-location') as maplibregl.GeoJSONSource | undefined;
     if (!src) return;
     if (!userLocation) {
@@ -473,12 +483,12 @@ export function MapView({
         },
       ],
     });
-  }, [userLocation]);
+  }, [userLocation, mapLoaded]);
 
   // Update nearest guide line along trails
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     const src = map.getSource('nearest-guide') as maplibregl.GeoJSONSource | undefined;
     if (!src) return;
     if (!nearestPath || nearestPath.length < 2) {
@@ -498,36 +508,36 @@ export function MapView({
         },
       ],
     });
-  }, [nearestPath]);
+  }, [nearestPath, mapLoaded]);
 
   // Rotate map bearing with device compass
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current) return;
+    if (!map || !mapLoaded) return;
     if (!compassEnabled || compassHeading === null) return;
     map.easeTo({
       bearing: compassHeading,
       duration: 140,
       easing: (t) => t,
     });
-  }, [compassEnabled, compassHeading]);
+  }, [compassEnabled, compassHeading, mapLoaded]);
 
   // Highlight closed trails in red
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current || !map.getLayer('trails-line')) return;
+    if (!map || !mapLoaded || !map.getLayer('trails-line')) return;
     map.setPaintProperty('trails-line', 'line-color', [
       'case',
       ['in', ['get', 'id'], ['literal', closedTrailIds]],
       '#dc2626',
       '#b45309',
     ]);
-  }, [closedTrailIds]);
+  }, [closedTrailIds, mapLoaded]);
 
   // Highlight selected POI radius
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loadedRef.current || !map.getLayer('pois-circle')) return;
+    if (!map || !mapLoaded || !map.getLayer('pois-circle')) return;
     const selectedId = selectedItem?.kind === 'poi' ? selectedItem.feature.properties.id : '';
     map.setPaintProperty('pois-circle', 'circle-radius', [
       'case',
@@ -535,7 +545,7 @@ export function MapView({
       13,
       ['interpolate', ['linear'], ['zoom'], 12, 5, 16, 10],
     ]);
-  }, [selectedItem]);
+  }, [selectedItem, mapLoaded]);
 
   // Fly to coordinates on request
   useEffect(() => {
