@@ -26,10 +26,10 @@ Questo file raccoglie le decisioni architetturali, il lavoro svolto e i prossimi
 ## Prossime cose da fare
 
 ### Fase 2 — Offline avanzato, Rilievo ad alta risoluzione e Navigazione
-- [ ] **Download offline esplicito ("Modalità Bosco Offline")**: generare file `PMTiles` statici (basemap vettoriale OSM + terreno DEM) ritagliati sull'area del bosco e aggiungere un pulsante in app per scaricarli in Cache Storage / IndexedDB con barra di avanzamento e stato aggiornamento.
-- [ ] **Valutazione DTM Regione Piemonte / MASE (1m / 5m)**: verificare se il micro-rilievo di terrazzi fluviali e canali migliora sensibilmente rispetto al DEM Terrarium attuale e, nel caso, generare un `terrain.pmtiles` ad alta risoluzione (licenza CC BY 4.0, con attribuzione).
-- [ ] **Orientamento bussola (`DeviceOrientation`)**: ruotare la mappa in base all'orientamento dello smartphone.
-- [ ] **Distanza e percorso lungo i sentieri**: calcolare il "punto più vicino" seguendo il grafo dei sentieri in `trails.geojson` invece della sola linea d'aria.
+- [x] **Download offline esplicito ("Modalità Bosco Offline")**: pulsante dedicato nell'app (`OfflineModal.tsx` + `offlineManager.ts`) per scaricare e verificare in Cache Storage i tasselli OSM (z12–z16), DEM Terrarium (z12–z15) e GeoJSON dell'area del bosco (475 risorse, ~10 MB) con barra di avanzamento, annullamento e rimozione cache.
+- [ ] **Valutazione DTM Regione Piemonte / MASE (1m / 5m)**: individuato dataset `RIPRESA AEREA ICE 2009-2011 - DTM` (passo 5 m, Geoportale Piemonte `r_piemon:224de2ac-023e-441c-9ae0-ea493b217a8e`, accessibile via WCS/download); resta da scaricare il ritaglio sull'area del bosco e generare/confrontare un `terrain.pmtiles` ad alta risoluzione (licenza CC BY 4.0) rispetto al DEM Terrarium attuale.
+- [x] **Orientamento bussola (`DeviceOrientation`)**: hook `useCompass.ts` con supporto permesso iOS (`requestPermission`), smoothing circolare dell'angolo e rotazione della mappa + auto-disattivazione su rotazione manuale.
+- [x] **Distanza e percorso lungo i sentieri**: router su grafo dei sentieri (`trailRouter.ts` su `trails.geojson` con algoritmo di Dijkstra, snapping sui segmenti e fallback in linea d'aria) per la funzione "Più vicino" e tracciamento del percorso reale sulla mappa.
 
 ### Fase 3 — Gestione contenuti sul campo e Admin
 - [ ] **Workflow aggiornamento POI/Sentieri**: interfaccia leggera (es. modale protetta o mini-backend Supabase / GitHub CMS) per aggiungere/modificare punti, segnalare chiusure sentieri e caricare foto direttamente dallo smartphone durante i sopralluoghi nel bosco.

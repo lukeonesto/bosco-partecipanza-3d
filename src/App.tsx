@@ -1,20 +1,27 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Compass, LocateFixed, X } from 'lucide-react';
+import { Compass, LocateFixed, Navigation2, X } from 'lucide-react';
 import { CATEGORIES } from './data/categories';
 import { t } from './i18n';
 import {
   CategoryId,
   Language,
   PoiCollection,
-  PoiFeature,
   SelectedItem,
   TrailCollection,
 } from './types';
-import { findNearestPoi, formatDistance } from './utils/geo';
+import { formatDistance } from './utils/geo';
+import {
+  buildTrailGraph,
+  findNearestPoiAlongTrails,
+  NearestRouteResult,
+} from './utils/trailRouter';
+import { getOfflineStatus } from './utils/offlineManager';
+import { useCompass } from './hooks/useCompass';
 import { MapView } from './components/MapView';
 import { SearchBar } from './components/SearchBar';
 import { CategoryFilterBar } from './components/CategoryFilterBar';
 import { DetailSheet } from './components/DetailSheet';
+import { OfflineModal } from './components/OfflineModal';
 
 const EMPTY_POIS: PoiCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_TRAILS: TrailCollection = { type: 'FeatureCollection', features: [] };
@@ -41,14 +48,23 @@ export function App() {
   const [gpsError, setGpsError] = useState<string | null>(null);
 
   const [showNearestPicker, setShowNearestPicker] = useState(false);
-  const [nearestTarget, setNearestTarget] = useState<{
-    poi: PoiFeature;
-    distanceM: number;
-  } | null>(null);
+  const [nearestTarget, setNearestTarget] = useState<NearestRouteResult | null>(null);
+
+  const [showOfflineModal, setShowOfflineModal] = useState(false);
+  const [offlineReady, setOfflineReady] = useState(false);
 
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true
   );
+
+  const {
+    compassEnabled,
+    heading: compassHeading,
+    compassError,
+    toggleCompass,
+    disableCompass,
+    clearCompassError,
+  } = useCompass(t(lang, 'compassUnsupported'));
 
   // Load GeoJSON data
   useEffect(() => {
@@ -78,6 +94,19 @@ export function App() {
       window.removeEventListener('offline', onOffline);
     };
   }, []);
+
+  // Check initial offline pack status
+  useEffect(() => {
+    getOfflineStatus()
+      .then((s) => setOfflineReady(s.isComplete))
+      .catch(() => {});
+  }, []);
+
+  // Build trail routing graph once trails load
+  const trailGraph = useMemo(
+    () => buildTrailGraph(trails.features),
+    [trails]
+  );
 
   // Category counts for chips
   const categoryCounts = useMemo(() => {
@@ -130,6 +159,22 @@ export function App() {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [gpsWatching]);
 
+  const applyNearestResult = (coords: [number, number], category: CategoryId) => {
+    const res = findNearestPoiAlongTrails(
+      coords,
+      pois.features,
+      trailGraph,
+      category
+    );
+    if (res) {
+      setNearestTarget(res);
+      setSelectedItem({ kind: 'poi', feature: res.poi });
+      setFlyToCoords([...res.poi.geometry.coordinates]);
+    } else {
+      setGpsError(t(lang, 'noPoiInCategory'));
+    }
+  };
+
   const handleFindNearest = (category: CategoryId) => {
     setShowNearestPicker(false);
     if (!userLocation) {
@@ -143,14 +188,7 @@ export function App() {
             pos.coords.latitude,
           ];
           setUserLocation(coords);
-          const res = findNearestPoi(coords, pois.features, category);
-          if (res) {
-            setNearestTarget(res);
-            setSelectedItem({ kind: 'poi', feature: res.poi });
-            setFlyToCoords([...res.poi.geometry.coordinates]);
-          } else {
-            setGpsError(t(lang, 'noPoiInCategory'));
-          }
+          applyNearestResult(coords, category);
         },
         () => setGpsError(t(lang, 'gpsError')),
         { enableHighAccuracy: true, timeout: 10000 }
@@ -158,14 +196,7 @@ export function App() {
       return;
     }
 
-    const res = findNearestPoi(userLocation, pois.features, category);
-    if (res) {
-      setNearestTarget(res);
-      setSelectedItem({ kind: 'poi', feature: res.poi });
-      setFlyToCoords([...res.poi.geometry.coordinates]);
-    } else {
-      setGpsError(t(lang, 'noPoiInCategory'));
-    }
+    applyNearestResult(userLocation, category);
   };
 
   return (
@@ -182,7 +213,10 @@ export function App() {
         lang={lang}
         userLocation={userLocation}
         userAccuracy={userAccuracy}
-        nearestTarget={nearestTarget?.poi ?? null}
+        nearestPath={nearestTarget?.pathCoordinates ?? null}
+        compassEnabled={compassEnabled}
+        compassHeading={compassHeading}
+        onDisableCompass={disableCompass}
         selectedItem={selectedItem}
         onSelectItem={(item) => setSelectedItem(item)}
         flyToCoords={flyToCoords}
@@ -204,6 +238,8 @@ export function App() {
         exaggeration={exaggeration}
         onChangeExaggeration={setExaggeration}
         isOnline={isOnline}
+        offlineReady={offlineReady}
+        onOpenOfflineModal={() => setShowOfflineModal(true)}
       />
 
       <CategoryFilterBar
@@ -215,13 +251,16 @@ export function App() {
         counts={categoryCounts}
       />
 
-      {/* GPS / Error toast */}
-      {gpsError && (
+      {/* GPS / Compass Error toast */}
+      {(gpsError || compassError) && (
         <div className="pointer-events-auto absolute inset-x-4 top-32 z-30 mx-auto flex max-w-md items-center justify-between rounded-2xl bg-red-600 px-3.5 py-2 text-xs font-medium text-white shadow-lg">
-          <span>{gpsError}</span>
+          <span>{gpsError || compassError}</span>
           <button
             type="button"
-            onClick={() => setGpsError(null)}
+            onClick={() => {
+              setGpsError(null);
+              clearCompassError();
+            }}
             className="ml-2 rounded-full p-0.5 hover:bg-red-700"
           >
             <X className="h-4 w-4" />
@@ -231,10 +270,14 @@ export function App() {
 
       {/* Nearest active banner */}
       {nearestTarget && (
-        <div className="pointer-events-auto absolute left-3 bottom-24 z-20 flex items-center gap-2 rounded-2xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-lg">
-          <Compass className="h-4 w-4" />
+        <div className="pointer-events-auto absolute left-3 bottom-24 z-20 flex flex-wrap items-center gap-2 rounded-2xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-lg">
+          <Compass className="h-4 w-4 shrink-0" />
           <span>
-            {t(lang, 'nearestFound')}: {formatDistance(nearestTarget.distanceM, lang)}
+            {t(lang, 'nearestFound')}: {formatDistance(nearestTarget.totalDistanceM, lang)} ·{' '}
+            {nearestTarget.mode === 'trail'
+              ? t(lang, 'nearestAlongTrails')
+              : t(lang, 'nearestDirect')}{' '}
+            ({t(lang, 'estWalkTime')} {nearestTarget.estimatedMinutes} min)
           </span>
           <button
             type="button"
@@ -246,30 +289,54 @@ export function App() {
         </div>
       )}
 
-      {/* Floating Action Buttons (GPS & Nearest) */}
+      {/* Floating Action Buttons (GPS, Compass & Nearest) */}
       {!selectedItem && (
         <div className="pointer-events-auto absolute bottom-8 left-3 z-20 flex flex-col gap-2 pb-[env(safe-area-inset-bottom)]">
-          <button
-            type="button"
-            onClick={() => startGps(true)}
-            className={`flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-xs font-semibold shadow-lg backdrop-blur-md transition ${
-              userLocation
-                ? 'bg-blue-600 text-white'
-                : 'bg-white/95 text-slate-800 hover:bg-white'
-            }`}
-          >
-            <LocateFixed className="h-4 w-4" />
-            <span>
-              {userLocation
-                ? `${t(lang, 'gpsActive')}${userAccuracy ? ` (±${userAccuracy} m)` : ''}`
-                : t(lang, 'gpsOff')}
-            </span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => startGps(true)}
+              className={`flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-xs font-semibold shadow-lg backdrop-blur-md transition ${
+                userLocation
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white/95 text-slate-800 hover:bg-white'
+              }`}
+            >
+              <LocateFixed className="h-4 w-4" />
+              <span>
+                {userLocation
+                  ? `${t(lang, 'gpsActive')}${userAccuracy ? ` (±${userAccuracy} m)` : ''}`
+                  : t(lang, 'gpsOff')}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={toggleCompass}
+              className={`flex items-center gap-1.5 rounded-2xl px-3 py-2.5 text-xs font-semibold shadow-lg backdrop-blur-md transition ${
+                compassEnabled
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-white/95 text-slate-800 hover:bg-white'
+              }`}
+              title={compassEnabled ? t(lang, 'compassOn') : t(lang, 'compassOff')}
+            >
+              <Navigation2
+                className="h-4 w-4 transition-transform"
+                style={{
+                  transform:
+                    compassEnabled && compassHeading !== null
+                      ? `rotate(${compassHeading}deg)`
+                      : undefined,
+                }}
+              />
+              <span>{compassEnabled ? t(lang, 'compassOn') : t(lang, 'compassOff')}</span>
+            </button>
+          </div>
 
           <button
             type="button"
             onClick={() => setShowNearestPicker((v) => !v)}
-            className="flex items-center gap-2 rounded-2xl bg-emerald-800 px-3.5 py-2.5 text-xs font-semibold text-white shadow-lg hover:bg-emerald-900"
+            className="flex w-fit items-center gap-2 rounded-2xl bg-emerald-800 px-3.5 py-2.5 text-xs font-semibold text-white shadow-lg hover:bg-emerald-900"
           >
             <Compass className="h-4 w-4" />
             <span>{t(lang, 'nearestBtn')}</span>
@@ -323,6 +390,14 @@ export function App() {
         userLocation={userLocation}
         isOnline={isOnline}
         onClose={() => setSelectedItem(null)}
+      />
+
+      <OfflineModal
+        open={showOfflineModal}
+        lang={lang}
+        isOnline={isOnline}
+        onClose={() => setShowOfflineModal(false)}
+        onStatusChange={setOfflineReady}
       />
     </div>
   );

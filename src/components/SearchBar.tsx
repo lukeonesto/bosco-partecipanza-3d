@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, X, Globe, Mountain, WifiOff } from 'lucide-react';
+import { Search, X, Globe, Mountain, WifiOff, Download, CheckCircle2 } from 'lucide-react';
 import { getLocalizedText, t } from '../i18n';
 import { Language, PoiFeature, TrailFeature, SelectedItem } from '../types';
 
@@ -16,6 +16,8 @@ interface SearchBarProps {
   exaggeration: number;
   onChangeExaggeration: (val: number) => void;
   isOnline: boolean;
+  offlineReady: boolean;
+  onOpenOfflineModal: () => void;
 }
 
 export function SearchBar({
@@ -31,6 +33,8 @@ export function SearchBar({
   exaggeration,
   onChangeExaggeration,
   isOnline,
+  offlineReady,
+  onOpenOfflineModal,
 }: SearchBarProps) {
   const [focused, setFocused] = useState(false);
   const [showReliefMenu, setShowReliefMenu] = useState(false);
@@ -197,6 +201,25 @@ export function SearchBar({
             </div>
           )}
         </div>
+
+        {/* Offline Mode Button */}
+        <button
+          type="button"
+          onClick={onOpenOfflineModal}
+          aria-label={t(lang, 'offlineModeTitle')}
+          title={t(lang, 'offlineModeTitle')}
+          className={`flex items-center justify-center rounded-2xl border p-2.5 shadow-lg backdrop-blur-md transition ${
+            offlineReady
+              ? 'border-emerald-200 bg-emerald-50/95 text-emerald-700 hover:bg-emerald-100'
+              : 'border-slate-200 bg-white/95 text-slate-700 hover:bg-slate-50'
+          }`}
+        >
+          {offlineReady ? (
+            <CheckCircle2 className="h-4 w-4" />
+          ) : (
+            <Download className="h-4 w-4" />
+          )}
+        </button>
 
         {/* Language Toggle */}
         <button

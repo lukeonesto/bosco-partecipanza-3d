@@ -5,7 +5,6 @@ import {
   CategoryId,
   Language,
   PoiCollection,
-  PoiFeature,
   SelectedItem,
   TrailCollection,
 } from '../types';
@@ -22,7 +21,10 @@ interface MapViewProps {
   lang: Language;
   userLocation: [number, number] | null;
   userAccuracy: number | null;
-  nearestTarget: PoiFeature | null;
+  nearestPath: [number, number][] | null;
+  compassEnabled: boolean;
+  compassHeading: number | null;
+  onDisableCompass: () => void;
   selectedItem: SelectedItem | null;
   onSelectItem: (item: SelectedItem | null) => void;
   flyToCoords: [number, number] | null;
@@ -52,7 +54,10 @@ export function MapView({
   exaggeration,
   lang,
   userLocation,
-  nearestTarget,
+  nearestPath,
+  compassEnabled,
+  compassHeading,
+  onDisableCompass,
   selectedItem,
   onSelectItem,
   flyToCoords,
@@ -62,6 +67,8 @@ export function MapView({
   const loadedRef = useRef(false);
   const onSelectRef = useRef(onSelectItem);
   onSelectRef.current = onSelectItem;
+  const onDisableCompassRef = useRef(onDisableCompass);
+  onDisableCompassRef.current = onDisableCompass;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -329,6 +336,12 @@ export function MapView({
           map.getCanvas().style.cursor = '';
         });
       }
+
+      map.on('rotatestart', (e) => {
+        if (e.originalEvent) {
+          onDisableCompassRef.current();
+        }
+      });
     });
 
     mapRef.current = map;
@@ -448,13 +461,13 @@ export function MapView({
     });
   }, [userLocation]);
 
-  // Update nearest guide line
+  // Update nearest guide line along trails
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !loadedRef.current) return;
     const src = map.getSource('nearest-guide') as maplibregl.GeoJSONSource | undefined;
     if (!src) return;
-    if (!userLocation || !nearestTarget) {
+    if (!nearestPath || nearestPath.length < 2) {
       src.setData({ type: 'FeatureCollection', features: [] });
       return;
     }
@@ -465,13 +478,25 @@ export function MapView({
           type: 'Feature',
           geometry: {
             type: 'LineString',
-            coordinates: [userLocation, nearestTarget.geometry.coordinates],
+            coordinates: nearestPath,
           },
           properties: {},
         },
       ],
     });
-  }, [userLocation, nearestTarget]);
+  }, [nearestPath]);
+
+  // Rotate map bearing with device compass
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !loadedRef.current) return;
+    if (!compassEnabled || compassHeading === null) return;
+    map.easeTo({
+      bearing: compassHeading,
+      duration: 140,
+      easing: (t) => t,
+    });
+  }, [compassEnabled, compassHeading]);
 
   // Highlight selected POI radius
   useEffect(() => {

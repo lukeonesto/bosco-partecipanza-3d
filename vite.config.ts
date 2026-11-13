@@ -54,8 +54,8 @@ export default defineConfig({
             options: {
               cacheName: 'osm-basemap-tiles',
               expiration: {
-                maxEntries: 800,
-                maxAgeSeconds: 60 * 60 * 24 * 14, // 14 days
+                maxEntries: 1500,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
               },
               cacheableResponse: {
                 statuses: [0, 200],
