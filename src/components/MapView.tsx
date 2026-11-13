@@ -46,6 +46,29 @@ function buildCategoryColorMatch(): maplibregl.ExpressionSpecification {
   return expr as maplibregl.ExpressionSpecification;
 }
 
+function registerCategoryIcons(map: maplibregl.Map): void {
+  const size = 48;
+  for (const cat of CATEGORIES) {
+    const imageId = `poi-icon-${cat.id}`;
+    if (map.hasImage(imageId)) continue;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) continue;
+
+    ctx.font =
+      '28px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(cat.emoji, size / 2, size / 2 + 2);
+
+    const imageData = ctx.getImageData(0, 0, size, size);
+    map.addImage(imageId, imageData, { pixelRatio: 2 });
+  }
+}
+
 export function MapView({
   pois,
   trails,
@@ -166,6 +189,8 @@ export function MapView({
     );
 
     map.on('load', () => {
+      registerCategoryIcons(map);
+
       map.addSource('boundary', {
         type: 'geojson',
         data: boundaryRef.current,
@@ -255,10 +280,21 @@ export function MapView({
         type: 'circle',
         source: 'pois',
         paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 5, 16, 10],
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 9, 16, 13],
           'circle-color': buildCategoryColorMatch(),
           'circle-stroke-color': '#ffffff',
           'circle-stroke-width': 2.2,
+        },
+      });
+      map.addLayer({
+        id: 'pois-icon',
+        type: 'symbol',
+        source: 'pois',
+        layout: {
+          'icon-image': ['concat', 'poi-icon-', ['get', 'categoria']],
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.65, 16, 0.9],
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': true,
         },
       });
       map.addLayer({
@@ -269,7 +305,7 @@ export function MapView({
         layout: {
           'text-field': ['get', lang === 'en' ? 'nome_en' : 'nome'],
           'text-size': 11,
-          'text-offset': [0, 1.4],
+          'text-offset': [0, 1.7],
           'text-anchor': 'top',
           'text-max-width': 10,
         },
@@ -422,6 +458,7 @@ export function MapView({
       ['literal', matchingIds],
     ];
     map.setFilter('pois-circle', filterExpr);
+    map.setFilter('pois-icon', filterExpr);
     map.setFilter('pois-label', filterExpr);
   }, [pois, activeCategory, searchQuery, lang, mapLoaded]);
 
@@ -542,8 +579,8 @@ export function MapView({
     map.setPaintProperty('pois-circle', 'circle-radius', [
       'case',
       ['==', ['get', 'id'], selectedId],
-      13,
-      ['interpolate', ['linear'], ['zoom'], 12, 5, 16, 10],
+      16,
+      ['interpolate', ['linear'], ['zoom'], 12, 9, 16, 13],
     ]);
   }, [selectedItem, mapLoaded]);
 
