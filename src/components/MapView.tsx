@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { PMTiles, Protocol, Source } from 'pmtiles';
 import { CATEGORIES } from '../data/categories';
@@ -131,6 +131,26 @@ export function MapView({
   onMapClickForPoiRef.current = onMapClickForPoi;
   const poisRef = useRef(pois);
   poisRef.current = pois;
+  const filteredPois = useMemo<PoiCollection>(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const features = pois.features.filter((p) => {
+      const catMatch = activeCategory === 'all' || p.properties.categoria === activeCategory;
+      if (!catMatch) return false;
+      if (!q) return true;
+      const name = (
+        lang === 'en' ? p.properties.nome_en || p.properties.nome : p.properties.nome
+      ).toLowerCase();
+      const desc = (
+        lang === 'en'
+          ? p.properties.descrizione_en || p.properties.descrizione
+          : p.properties.descrizione
+      ).toLowerCase();
+      return name.includes(q) || desc.includes(q);
+    });
+    return { type: 'FeatureCollection', features };
+  }, [pois, activeCategory, searchQuery, lang]);
+  const filteredPoisRef = useRef(filteredPois);
+  filteredPoisRef.current = filteredPois;
   const trailsRef = useRef(trails);
   trailsRef.current = trails;
   const boundaryRef = useRef(boundary);
@@ -302,12 +322,44 @@ export function MapView({
 
       map.addSource('pois', {
         type: 'geojson',
-        data: poisRef.current,
+        data: filteredPoisRef.current,
+        cluster: true,
+        clusterMaxZoom: 15,
+        clusterRadius: 48,
+      });
+      map.addLayer({
+        id: 'pois-clusters',
+        type: 'circle',
+        source: 'pois',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#64748b',
+          'circle-radius': ['step', ['get', 'point_count'], 16, 10, 20, 25, 24],
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff',
+          'circle-opacity': 0.92,
+        },
+      });
+      map.addLayer({
+        id: 'pois-cluster-count',
+        type: 'symbol',
+        source: 'pois',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': ['get', 'point_count_abbreviated'],
+          'text-size': 12,
+          'text-allow-overlap': true,
+          'text-ignore-placement': true,
+        },
+        paint: {
+          'text-color': '#ffffff',
+        },
       });
       map.addLayer({
         id: 'pois-circle',
         type: 'circle',
         source: 'pois',
+        filter: ['!', ['has', 'point_count']],
         paint: {
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 5, 14, 7.5, 16, 10],
           'circle-color': buildCategoryColorMatch(),
@@ -319,6 +371,7 @@ export function MapView({
         id: 'pois-icon',
         type: 'symbol',
         source: 'pois',
+        filter: ['!', ['has', 'point_count']],
         minzoom: 13.5,
         layout: {
           'icon-image': ['concat', 'poi-icon-', ['get', 'categoria']],
@@ -331,6 +384,7 @@ export function MapView({
         id: 'pois-label',
         type: 'symbol',
         source: 'pois',
+        filter: ['!', ['has', 'point_count']],
         minzoom: 15,
         layout: {
           'text-field': ['get', lang === 'en' ? 'nome_en' : 'nome'],
@@ -373,6 +427,25 @@ export function MapView({
       });
 
       // Interactions
+      map.on('click', 'pois-clusters', async (e) => {
+        const feat = e.features?.[0];
+        if (!feat) return;
+        const clusterId = feat.properties?.cluster_id;
+        const src = map.getSource('pois') as maplibregl.GeoJSONSource | undefined;
+        if (!src || clusterId === undefined) return;
+        try {
+          const zoom = await src.getClusterExpansionZoom(clusterId);
+          const coords = (feat.geometry as GeoJSON.Point).coordinates as [number, number];
+          map.easeTo({
+            center: coords,
+            zoom: Math.min(zoom + 0.5, 17),
+            duration: 450,
+          });
+        } catch {
+          // ignore
+        }
+      });
+
       map.on('click', 'pois-circle', (e) => {
         const feat = e.features?.[0];
         if (!feat) return;
@@ -389,8 +462,10 @@ export function MapView({
       });
 
       map.on('click', 'trails-hit', (e) => {
-        // Prefer POI if clicked right on top of one
-        const poiHits = map.queryRenderedFeatures(e.point, { layers: ['pois-circle'] });
+        // Prefer POI or cluster if clicked right on top of one
+        const poiHits = map.queryRenderedFeatures(e.point, {
+          layers: ['pois-clusters', 'pois-circle'],
+        });
         if (poiHits.length > 0) return;
 
         const feat = e.features?.[0];
@@ -405,7 +480,7 @@ export function MapView({
 
       map.on('click', (e) => {
         const hits = map.queryRenderedFeatures(e.point, {
-          layers: ['pois-circle', 'trails-hit'],
+          layers: ['pois-clusters', 'pois-circle', 'trails-hit'],
         });
         if (hits.length === 0) {
           if (fieldModeRef.current) {
@@ -416,7 +491,7 @@ export function MapView({
         }
       });
 
-      for (const layerId of ['pois-circle', 'trails-hit']) {
+      for (const layerId of ['pois-clusters', 'pois-circle', 'trails-hit']) {
         map.on('mouseenter', layerId, () => {
           map.getCanvas().style.cursor = 'pointer';
         });
@@ -444,12 +519,12 @@ export function MapView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update GeoJSON data sources when loaded asynchronously
+  // Update GeoJSON data sources when loaded or filtered
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapLoaded) return;
-    (map.getSource('pois') as maplibregl.GeoJSONSource | undefined)?.setData(pois);
-  }, [pois, mapLoaded]);
+    (map.getSource('pois') as maplibregl.GeoJSONSource | undefined)?.setData(filteredPois);
+  }, [filteredPois, mapLoaded]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -462,35 +537,6 @@ export function MapView({
     if (!map || !mapLoaded) return;
     (map.getSource('boundary') as maplibregl.GeoJSONSource | undefined)?.setData(boundary);
   }, [boundary, mapLoaded]);
-
-  // Filter POIs by category and search query
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapLoaded) return;
-
-    const q = searchQuery.trim().toLowerCase();
-    const matchingIds = pois.features
-      .filter((p) => {
-        const catMatch = activeCategory === 'all' || p.properties.categoria === activeCategory;
-        if (!catMatch) return false;
-        if (!q) return true;
-        const name = (lang === 'en' ? p.properties.nome_en || p.properties.nome : p.properties.nome).toLowerCase();
-        const desc = (
-          lang === 'en' ? p.properties.descrizione_en || p.properties.descrizione : p.properties.descrizione
-        ).toLowerCase();
-        return name.includes(q) || desc.includes(q);
-      })
-      .map((p) => p.properties.id);
-
-    const filterExpr: maplibregl.FilterSpecification = [
-      'in',
-      ['get', 'id'],
-      ['literal', matchingIds],
-    ];
-    map.setFilter('pois-circle', filterExpr);
-    map.setFilter('pois-icon', filterExpr);
-    map.setFilter('pois-label', filterExpr);
-  }, [pois, activeCategory, searchQuery, lang, mapLoaded]);
 
   // Toggle trails visibility
   useEffect(() => {
