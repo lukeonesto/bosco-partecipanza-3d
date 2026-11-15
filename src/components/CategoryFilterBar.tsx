@@ -20,7 +20,7 @@ export function CategoryFilterBar({
   counts,
 }: CategoryFilterBarProps) {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-[4.35rem] z-10 px-3 pt-[env(safe-area-inset-top)]">
+    <div className="pointer-events-none relative z-10 -mx-3 px-3">
       <div className="no-scrollbar pointer-events-auto flex items-center gap-1.5 overflow-x-auto py-1">
         <button
           type="button"

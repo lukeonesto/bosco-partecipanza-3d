@@ -7,12 +7,12 @@ import {
   Calendar,
   WifiOff,
   ExternalLink,
-  AlertTriangle,
   Pencil,
+  Trash2,
 } from 'lucide-react';
 import { CATEGORY_MAP, getCategoryLabel } from '../data/categories';
 import { getLocalizedText, t } from '../i18n';
-import { Language, PoiFeature, SelectedItem, TrailReport, TrailStatus } from '../types';
+import { Language, PoiFeature, SelectedItem } from '../types';
 import {
   formatDistance,
   formatDuration,
@@ -24,10 +24,9 @@ interface DetailSheetProps {
   lang: Language;
   userLocation: [number, number] | null;
   isOnline: boolean;
-  fieldMode: boolean;
-  trailReport?: TrailReport;
-  onSaveTrailReport: (report: TrailReport) => void;
+  isAdmin: boolean;
   onEditPoi?: (poi: PoiFeature) => void;
+  onDeletePoi?: (id: string) => void;
   onClose: () => void;
 }
 
@@ -36,21 +35,16 @@ export function DetailSheet({
   lang,
   userLocation,
   isOnline,
-  fieldMode,
-  trailReport,
-  onSaveTrailReport,
+  isAdmin,
   onEditPoi,
+  onDeletePoi,
   onClose,
 }: DetailSheetProps) {
-  const [statusDraft, setStatusDraft] = useState<TrailStatus>(
-    trailReport?.status ?? 'aperto'
-  );
-  const [noteDraft, setNoteDraft] = useState(trailReport?.note ?? '');
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
-    setStatusDraft(trailReport?.status ?? 'aperto');
-    setNoteDraft(trailReport?.note ?? '');
-  }, [trailReport, item]);
+    setConfirmDelete(false);
+  }, [item]);
 
   if (!item) return null;
 
@@ -150,8 +144,8 @@ export function DetailSheet({
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            {fieldMode && onEditPoi && (
+          <div className="flex flex-wrap items-center gap-2">
+            {isAdmin && onEditPoi && (
               <button
                 type="button"
                 onClick={() => onEditPoi(item.feature)}
@@ -159,6 +153,31 @@ export function DetailSheet({
               >
                 <Pencil className="h-3.5 w-3.5" />
                 <span>{t(lang, 'fieldEditPoiBtn')}</span>
+              </button>
+            )}
+
+            {isAdmin && onDeletePoi && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (!confirmDelete) {
+                    setConfirmDelete(true);
+                    return;
+                  }
+                  onDeletePoi(properties.id);
+                }}
+                className={`liquid-interactive inline-flex items-center gap-1 rounded-full border px-3 py-2 text-xs font-semibold ${
+                  confirmDelete
+                    ? 'liquid-tint-red border-red-600 text-white'
+                    : 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
+                }`}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>
+                  {confirmDelete
+                    ? `${t(lang, 'fieldDeletePoiBtn')}?`
+                    : t(lang, 'fieldDeletePoiBtn')}
+                </span>
               </button>
             )}
 
@@ -177,7 +196,7 @@ export function DetailSheet({
     );
   }
 
-  // Trail detail
+  // Trail detail (strictly read-only, no comments or status submissions)
   const { properties } = item.feature;
   const title = getLocalizedText(lang, properties.nome, properties.nome_en);
   const description = getLocalizedText(
@@ -242,87 +261,6 @@ export function DetailSheet({
       </div>
 
       <p className="mt-3 text-sm leading-relaxed text-slate-700">{description}</p>
-
-      {trailReport && (
-        <div
-          className={`mt-3 flex items-start gap-2 rounded-2xl border px-3.5 py-2.5 text-xs font-medium ${
-            trailReport.status === 'chiuso'
-              ? 'border-red-200/80 bg-red-500/10 text-red-800'
-              : trailReport.status === 'attenzione'
-                ? 'border-amber-200/80 bg-amber-500/10 text-amber-800'
-                : 'border-emerald-200/80 bg-emerald-500/10 text-emerald-800'
-          }`}
-        >
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-          <div>
-            <div className="font-bold">
-              {t(lang, 'trailStatusLabel')}:{' '}
-              {trailReport.status === 'chiuso'
-                ? t(lang, 'trailStatusClosed')
-                : trailReport.status === 'attenzione'
-                  ? t(lang, 'trailStatusCaution')
-                  : t(lang, 'trailStatusOpen')}
-            </div>
-            {trailReport.note && <div className="mt-0.5">{trailReport.note}</div>}
-          </div>
-        </div>
-      )}
-
-      {fieldMode && (
-        <div className="liquid-subcard mt-3.5 rounded-2xl p-3.5">
-          <div className="text-xs font-semibold text-slate-800">
-            {t(lang, 'trailStatusLabel')}
-          </div>
-          <div className="mt-2 flex gap-1.5">
-            {(['aperto', 'attenzione', 'chiuso'] as TrailStatus[]).map((st) => (
-              <button
-                key={st}
-                type="button"
-                onClick={() => setStatusDraft(st)}
-                className={`liquid-interactive flex-1 rounded-full px-2.5 py-1.5 text-[11px] font-semibold ${
-                  statusDraft === st
-                    ? st === 'chiuso'
-                      ? 'liquid-tint-red text-white'
-                      : st === 'attenzione'
-                        ? 'liquid-tint-amber text-white'
-                        : 'liquid-tint-emerald text-white'
-                    : 'liquid-glass text-slate-700'
-                }`}
-              >
-                {st === 'chiuso'
-                  ? t(lang, 'trailStatusClosed')
-                  : st === 'attenzione'
-                    ? t(lang, 'trailStatusCaution')
-                    : t(lang, 'trailStatusOpen')}
-              </button>
-            ))}
-          </div>
-          <div className="mt-2.5 flex gap-2">
-            <input
-              type="text"
-              value={noteDraft}
-              onChange={(e) => setNoteDraft(e.target.value)}
-              placeholder={t(lang, 'trailStatusNotePlaceholder')}
-              className="liquid-input flex-1 rounded-full px-3.5 py-1.5 text-xs text-slate-900 placeholder:text-slate-400"
-            />
-            <button
-              type="button"
-              onClick={() =>
-                onSaveTrailReport({
-                  trailId: properties.id,
-                  trailName: title,
-                  status: statusDraft,
-                  note: noteDraft.trim(),
-                  updatedAt: new Date().toISOString(),
-                })
-              }
-              className="liquid-tint-emerald liquid-interactive rounded-full px-4 py-1.5 text-xs font-semibold text-white"
-            >
-              {t(lang, 'trailStatusSave')}
-            </button>
-          </div>
-        </div>
-      )}
 
       <div className="mt-4 flex items-center justify-between border-t border-slate-900/8 pt-3.5 text-xs text-slate-500">
         <span className="inline-flex items-center gap-1">

@@ -1,5 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Compass, LocateFixed, Lock, MapPinPlus, Navigation2, X } from 'lucide-react';
+import {
+  Check,
+  CloudUpload,
+  Compass,
+  ListFilter,
+  LocateFixed,
+  Lock,
+  MapPinPlus,
+  Navigation2,
+  X,
+} from 'lucide-react';
 import { CATEGORIES } from './data/categories';
 import { t } from './i18n';
 import {
@@ -9,7 +19,6 @@ import {
   PoiFeature,
   SelectedItem,
   TrailCollection,
-  TrailReport,
 } from './types';
 import { formatDistance } from './utils/geo';
 import {
@@ -19,12 +28,14 @@ import {
 } from './utils/trailRouter';
 import { getOfflineStatus } from './utils/offlineManager';
 import {
-  clearFieldDrafts,
+  cleanupLegacyPublicDrafts,
+  clearAdminDrafts,
   loadCustomPois,
-  loadTrailReports,
-  mergePoisWithCustom,
+  loadDeletedPoiIds,
+  mergePoisWithAdminChanges,
+  publishPoisToSharedStorage,
   saveCustomPois,
-  saveTrailReports,
+  saveDeletedPoiIds,
 } from './utils/fieldStorage';
 import { useCompass } from './hooks/useCompass';
 import { MapView } from './components/MapView';
@@ -39,6 +50,7 @@ import { isAdminUnlocked, lockAdmin } from './utils/adminAuth';
 const EMPTY_POIS: PoiCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_TRAILS: TrailCollection = { type: 'FeatureCollection', features: [] };
 const EMPTY_FC: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
+const DEFAULT_MAP_CENTER: [number, number] = [8.2528, 45.2245];
 
 export function App() {
   const [lang, setLang] = useState<Language>('it');
@@ -68,19 +80,19 @@ export function App() {
 
   const [isAdmin, setIsAdmin] = useState<boolean>(() => isAdminUnlocked());
   const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminToast, setAdminToast] = useState<string | null>(null);
   const adminTapRef = useRef<{ count: number; lastTap: number }>({
     count: 0,
     lastTap: 0,
   });
 
-  const [fieldMode, setFieldMode] = useState(false);
   const [customPois, setCustomPois] = useState<PoiFeature[]>(() => loadCustomPois());
-  const [trailReports, setTrailReports] = useState<Record<string, TrailReport>>(() =>
-    loadTrailReports()
+  const [deletedPoiIds, setDeletedPoiIds] = useState<string[]>(() =>
+    loadDeletedPoiIds()
   );
   const [draftPoiCoords, setDraftPoiCoords] = useState<[number, number] | null>(null);
   const [editingPoi, setEditingPoi] = useState<PoiFeature | null>(null);
-  const [showFieldDrafts, setShowFieldDrafts] = useState(false);
+  const [showAdminManager, setShowAdminManager] = useState(false);
 
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true
@@ -95,10 +107,28 @@ export function App() {
     clearCompassError,
   } = useCompass(t(lang, 'compassUnsupported'));
 
-  // Load GeoJSON data
+  // Load GeoJSON data (prefer /api/pois when available for fresh shared updates, fallback to /data/pois.geojson)
   useEffect(() => {
+    cleanupLegacyPublicDrafts();
+
+    const loadPoisData = async (): Promise<PoiCollection> => {
+      try {
+        const apiRes = await fetch('/api/pois', { cache: 'no-store' });
+        if (apiRes.ok) {
+          const data = await apiRes.json();
+          if (data && data.type === 'FeatureCollection') {
+            return data as PoiCollection;
+          }
+        }
+      } catch {
+        // Fallback to static GeoJSON
+      }
+      const staticRes = await fetch('/data/pois.geojson');
+      return staticRes.json();
+    };
+
     Promise.all([
-      fetch('/data/pois.geojson').then((r) => r.json()),
+      loadPoisData(),
       fetch('/data/trails.geojson').then((r) => r.json()),
       fetch('/data/boundary.geojson').then((r) => r.json()),
     ])
@@ -144,29 +174,23 @@ export function App() {
     [trails]
   );
 
-  const mergedPois = useMemo(
-    () => mergePoisWithCustom(pois, customPois),
-    [pois, customPois]
+  // Public users only see official published POIs; Admin sees live merged changes
+  const mergedAdminPois = useMemo(
+    () => mergePoisWithAdminChanges(pois, customPois, deletedPoiIds),
+    [pois, customPois, deletedPoiIds]
   );
 
-  const closedTrailIds = useMemo(
-    () =>
-      Object.values(trailReports)
-        .filter((r) => r.status === 'chiuso')
-        .map((r) => r.trailId),
-    [trailReports]
-  );
-
-  const fieldDraftCount = customPois.length + Object.keys(trailReports).length;
+  const displayedPois = isAdmin ? mergedAdminPois : pois;
+  const pendingAdminChangesCount = customPois.length + deletedPoiIds.length;
 
   // Category counts for chips
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const p of mergedPois.features) {
+    for (const p of displayedPois.features) {
       counts[p.properties.categoria] = (counts[p.properties.categoria] || 0) + 1;
     }
     return counts;
-  }, [mergedPois]);
+  }, [displayedPois]);
 
   // GPS tracking
   const startGps = (centerOnFix = true) => {
@@ -213,7 +237,7 @@ export function App() {
   const applyNearestResult = (coords: [number, number], category: CategoryId) => {
     const res = findNearestPoiAlongTrails(
       coords,
-      mergedPois.features,
+      displayedPois.features,
       trailGraph,
       category
     );
@@ -230,7 +254,6 @@ export function App() {
     setShowNearestPicker(false);
     if (!userLocation) {
       startGps(false);
-      // Fallback: if GPS isn't ready yet, notify user
       if (!('geolocation' in navigator)) return;
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -250,43 +273,102 @@ export function App() {
     applyNearestResult(userLocation, category);
   };
 
+  const syncCollectionToServer = async (nextCollection: PoiCollection) => {
+    const res = await publishPoisToSharedStorage(nextCollection);
+    if (res.ok) {
+      setPois(nextCollection);
+      clearAdminDrafts();
+      setCustomPois([]);
+      setDeletedPoiIds([]);
+      setAdminToast(
+        res.mode === 'github'
+          ? t(lang, 'adminPublishedGithub')
+          : t(lang, 'adminPublishedLocal')
+      );
+      setTimeout(() => setAdminToast(null), 3500);
+    }
+  };
+
   const handleSaveCustomPoi = (savedPoi: PoiFeature) => {
+    if (!isAdmin) return;
     const exists = customPois.some((p) => p.properties.id === savedPoi.properties.id);
-    const updated = exists
-      ? customPois.map((p) => (p.properties.id === savedPoi.properties.id ? savedPoi : p))
+    const updatedCustom = exists
+      ? customPois.map((p) =>
+          p.properties.id === savedPoi.properties.id ? savedPoi : p
+        )
       : [...customPois, savedPoi];
-    setCustomPois(updated);
-    saveCustomPois(updated);
+    const updatedDeleted = deletedPoiIds.filter(
+      (id) => id !== savedPoi.properties.id
+    );
+
+    setCustomPois(updatedCustom);
+    saveCustomPois(updatedCustom);
+    setDeletedPoiIds(updatedDeleted);
+    saveDeletedPoiIds(updatedDeleted);
+
     setDraftPoiCoords(null);
     setEditingPoi(null);
     setSelectedItem({ kind: 'poi', feature: savedPoi });
+
+    const nextCollection = mergePoisWithAdminChanges(
+      pois,
+      updatedCustom,
+      updatedDeleted
+    );
+    void syncCollectionToServer(nextCollection);
   };
 
-  const handleDeleteCustomPoi = (id: string) => {
-    const updated = customPois.filter((p) => p.properties.id !== id);
-    setCustomPois(updated);
-    saveCustomPois(updated);
+  const handleDeletePoi = (id: string) => {
+    if (!isAdmin) return;
+    const updatedCustom = customPois.filter((p) => p.properties.id !== id);
+    const updatedDeleted = deletedPoiIds.includes(id)
+      ? deletedPoiIds
+      : [...deletedPoiIds, id];
+
+    setCustomPois(updatedCustom);
+    saveCustomPois(updatedCustom);
+    setDeletedPoiIds(updatedDeleted);
+    saveDeletedPoiIds(updatedDeleted);
+
+    setEditingPoi(null);
+    setDraftPoiCoords(null);
+    if (
+      selectedItem?.kind === 'poi' &&
+      selectedItem.feature.properties.id === id
+    ) {
+      setSelectedItem(null);
+    }
+
+    const nextCollection = mergePoisWithAdminChanges(
+      pois,
+      updatedCustom,
+      updatedDeleted
+    );
+    void syncCollectionToServer(nextCollection);
   };
 
-  const handleSaveTrailReport = (report: TrailReport) => {
-    const updated = { ...trailReports, [report.trailId]: report };
-    setTrailReports(updated);
-    saveTrailReports(updated);
-  };
-
-  const handleClearFieldDrafts = () => {
-    clearFieldDrafts();
+  const handleClearAdminDrafts = () => {
+    clearAdminDrafts();
     setCustomPois([]);
-    setTrailReports({});
+    setDeletedPoiIds([]);
+  };
+
+  const handleLockAdmin = () => {
+    lockAdmin();
+    setIsAdmin(false);
+    setShowAdminManager(false);
+    setEditingPoi(null);
+    setDraftPoiCoords(null);
   };
 
   const handleAddPoiAtGps = () => {
+    if (!isAdmin) return;
     if (userLocation) {
       setDraftPoiCoords([...userLocation]);
       return;
     }
     if (!('geolocation' in navigator)) {
-      setGpsError(t(lang, 'gpsError'));
+      setDraftPoiCoords([...DEFAULT_MAP_CENTER]);
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -298,15 +380,15 @@ export function App() {
         setUserLocation(coords);
         setDraftPoiCoords(coords);
       },
-      () => setGpsError(t(lang, 'gpsError')),
-      { enableHighAccuracy: true, timeout: 10000 }
+      () => setDraftPoiCoords([...DEFAULT_MAP_CENTER]),
+      { enableHighAccuracy: true, timeout: 8000 }
     );
   };
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-slate-100">
       <MapView
-        pois={mergedPois}
+        pois={displayedPois}
         trails={trails}
         boundary={boundary}
         activeCategory={activeCategory}
@@ -321,174 +403,220 @@ export function App() {
         compassEnabled={compassEnabled}
         compassHeading={compassHeading}
         onDisableCompass={disableCompass}
-        fieldMode={isAdmin && fieldMode}
-        closedTrailIds={closedTrailIds}
-        onMapClickForPoi={(coords) => setDraftPoiCoords(coords)}
+        fieldMode={isAdmin}
+        closedTrailIds={[]}
+        onMapClickForPoi={(coords) => {
+          if (isAdmin) {
+            setEditingPoi(null);
+            setDraftPoiCoords(coords);
+          }
+        }}
         selectedItem={selectedItem}
         onSelectItem={(item) => setSelectedItem(item)}
         flyToCoords={flyToCoords}
       />
 
-      <SearchBar
-        lang={lang}
-        onToggleLang={() => setLang((l) => (l === 'it' ? 'en' : 'it'))}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        pois={mergedPois.features}
-        trails={trails.features}
-        onSelectResult={(item, coords) => {
-          setSelectedItem(item);
-          setFlyToCoords([...coords]);
-        }}
-        is3D={is3D}
-        onToggle3D={() => setIs3D((v) => !v)}
-        exaggeration={exaggeration}
-        onChangeExaggeration={setExaggeration}
-        isOnline={isOnline}
-        offlineReady={offlineReady}
-        onOpenOfflineModal={() => setShowOfflineModal(true)}
-        isAdmin={isAdmin}
-        fieldMode={isAdmin && fieldMode}
-        onToggleFieldMode={() => setFieldMode((v) => !v)}
-        fieldDraftCount={fieldDraftCount}
-      />
+      {/* Top HUD stack (Search, Filters, Admin Banner, Error Toast) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex flex-col gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+        <SearchBar
+          lang={lang}
+          onToggleLang={() => setLang((l) => (l === 'it' ? 'en' : 'it'))}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          pois={displayedPois.features}
+          trails={trails.features}
+          onSelectResult={(item, coords) => {
+            setSelectedItem(item);
+            setFlyToCoords([...coords]);
+          }}
+          is3D={is3D}
+          onToggle3D={() => setIs3D((v) => !v)}
+          exaggeration={exaggeration}
+          onChangeExaggeration={setExaggeration}
+          isOnline={isOnline}
+          offlineReady={offlineReady}
+          onOpenOfflineModal={() => setShowOfflineModal(true)}
+          isAdmin={isAdmin}
+          onAdminButtonClick={() => {
+            if (isAdmin) {
+              setShowAdminManager(true);
+            } else {
+              setShowAdminModal(true);
+            }
+          }}
+          pendingAdminChangesCount={pendingAdminChangesCount}
+        />
 
-      <CategoryFilterBar
-        lang={lang}
-        activeCategory={activeCategory}
-        onSelectCategory={setActiveCategory}
-        showTrails={showTrails}
-        onToggleTrails={() => setShowTrails((v) => !v)}
-        counts={categoryCounts}
-      />
+        <CategoryFilterBar
+          lang={lang}
+          activeCategory={activeCategory}
+          onSelectCategory={setActiveCategory}
+          showTrails={showTrails}
+          onToggleTrails={() => setShowTrails((v) => !v)}
+          counts={categoryCounts}
+        />
 
-      {/* Field Survey Mode Banner (Admin only) */}
-      {isAdmin && fieldMode && !selectedItem && (
-        <div className="liquid-glass-elevated animate-liquid-pop pointer-events-auto absolute inset-x-3 top-[7.5rem] z-20 mx-auto flex max-w-md flex-wrap items-center justify-between gap-2 rounded-3xl border border-amber-300/60 px-3.5 py-2.5 text-xs text-amber-950">
-          <span className="font-semibold tracking-tight">{t(lang, 'fieldModeBanner')}</span>
-          <div className="flex flex-wrap items-center gap-1.5">
+        {/* Admin Mode Banner (Visible ONLY when Admin is unlocked) */}
+        {isAdmin && !selectedItem && (
+          <div className="liquid-glass-elevated animate-liquid-pop pointer-events-auto relative z-10 mx-auto flex w-full max-w-lg flex-wrap items-center justify-between gap-2 rounded-3xl border border-amber-300/60 px-3.5 py-2.5 text-xs text-amber-950">
+            <span className="font-semibold tracking-tight">
+              {t(lang, 'adminBannerHint')}
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleAddPoiAtGps}
+                className="liquid-tint-amber liquid-interactive flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold text-white"
+              >
+                <MapPinPlus className="h-3.5 w-3.5" />
+                <span>{t(lang, 'fieldAddAtGps')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowAdminManager(true)}
+                className="liquid-subcard liquid-interactive flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold tabular-nums text-amber-950 hover:bg-white/80"
+              >
+                <ListFilter className="h-3.5 w-3.5" />
+                <span>
+                  {t(lang, 'adminManagePoisBtn')} ({displayedPois.features.length})
+                </span>
+              </button>
+              {pendingAdminChangesCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAdminManager(true)}
+                  className="liquid-tint-emerald liquid-interactive flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold text-white"
+                >
+                  <CloudUpload className="h-3.5 w-3.5" />
+                  <span>
+                    {t(lang, 'adminPublishBtn')} ({pendingAdminChangesCount})
+                  </span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleLockAdmin}
+                className="liquid-subcard liquid-interactive flex items-center gap-1 rounded-full px-2.5 py-1.5 font-semibold text-slate-600 hover:text-red-700"
+                title={t(lang, 'adminLockBtn')}
+              >
+                <Lock className="h-3 w-3" />
+                <span>{t(lang, 'adminLockBtn')}</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Admin Saved Toast */}
+        {adminToast && (
+          <div className="liquid-tint-emerald animate-liquid-pop pointer-events-auto relative z-30 mx-auto flex w-full max-w-md items-center justify-between rounded-full px-4 py-2 text-xs font-semibold text-white">
+            <span className="flex items-center gap-1.5">
+              <Check className="h-4 w-4 shrink-0" />
+              {adminToast}
+            </span>
             <button
               type="button"
-              onClick={handleAddPoiAtGps}
-              className="liquid-tint-amber liquid-interactive flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold text-white"
+              onClick={() => setAdminToast(null)}
+              className="liquid-interactive ml-2 rounded-full bg-white/15 p-1 hover:bg-white/25"
             >
-              <MapPinPlus className="h-3.5 w-3.5" />
-              <span>{t(lang, 'fieldAddAtGps')}</span>
+              <X className="h-3.5 w-3.5" />
             </button>
-            <button
-              type="button"
-              onClick={() => setShowFieldDrafts(true)}
-              className="liquid-subcard liquid-interactive rounded-full px-3 py-1.5 font-semibold tabular-nums text-amber-950 hover:bg-white/80"
-            >
-              {t(lang, 'fieldExportBtn')} ({fieldDraftCount})
-            </button>
+          </div>
+        )}
+
+        {/* GPS / Compass Error toast */}
+        {(gpsError || compassError) && (
+          <div className="liquid-tint-red animate-liquid-pop pointer-events-auto relative z-30 mx-auto flex w-full max-w-md items-center justify-between rounded-full px-4 py-2.5 text-xs font-semibold text-white">
+            <span>{gpsError || compassError}</span>
             <button
               type="button"
               onClick={() => {
-                lockAdmin();
-                setIsAdmin(false);
-                setFieldMode(false);
+                setGpsError(null);
+                clearCompassError();
               }}
-              className="liquid-subcard liquid-interactive flex items-center gap-1 rounded-full px-2.5 py-1.5 font-semibold text-slate-600 hover:text-red-700"
-              title={t(lang, 'adminLockBtn')}
+              className="liquid-interactive ml-2 rounded-full bg-white/15 p-1 hover:bg-white/25"
             >
-              <Lock className="h-3 w-3" />
-              <span>{t(lang, 'adminLockBtn')}</span>
+              <X className="h-3.5 w-3.5" />
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* GPS / Compass Error toast */}
-      {(gpsError || compassError) && (
-        <div className="liquid-tint-red animate-liquid-pop pointer-events-auto absolute inset-x-4 top-32 z-30 mx-auto flex max-w-md items-center justify-between rounded-full px-4 py-2.5 text-xs font-semibold text-white">
-          <span>{gpsError || compassError}</span>
-          <button
-            type="button"
-            onClick={() => {
-              setGpsError(null);
-              clearCompassError();
-            }}
-            className="liquid-interactive ml-2 rounded-full bg-white/15 p-1 hover:bg-white/25"
-          >
-            <X className="h-3.5 w-3.5" />
-          </button>
-        </div>
-      )}
-
-      {/* Nearest active banner */}
-      {nearestTarget && (
-        <div className="liquid-tint-blue animate-liquid-pop pointer-events-auto absolute bottom-32 left-3 z-20 flex flex-wrap items-center gap-2 rounded-full px-3.5 py-2 text-xs font-semibold text-white">
-          <Compass className="h-4 w-4 shrink-0" />
-          <span className="tabular-nums">
-            {t(lang, 'nearestFound')}: {formatDistance(nearestTarget.totalDistanceM, lang)} ·{' '}
-            {nearestTarget.mode === 'trail'
-              ? t(lang, 'nearestAlongTrails')
-              : t(lang, 'nearestDirect')}{' '}
-            ({t(lang, 'estWalkTime')} {nearestTarget.estimatedMinutes} min)
-          </span>
-          <button
-            type="button"
-            onClick={() => setNearestTarget(null)}
-            className="liquid-interactive ml-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] hover:bg-white/30"
-          >
-            {t(lang, 'cancelNearest')}
-          </button>
-        </div>
-      )}
-
-      {/* Floating Action Buttons (GPS, Compass & Nearest) */}
-      {!selectedItem && (
-        <div className="pointer-events-auto absolute bottom-10 left-3 z-20 flex flex-col gap-2 pb-[env(safe-area-inset-bottom)]">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => startGps(true)}
-              className={`liquid-interactive flex items-center gap-2 rounded-full px-3.5 py-2.5 text-xs font-semibold tabular-nums ${
-                userLocation
-                  ? 'liquid-tint-blue text-white'
-                  : 'liquid-glass text-slate-800 hover:bg-white/80'
-              }`}
-            >
-              <LocateFixed className="h-4 w-4" />
-              <span>
-                {userLocation
-                  ? `${t(lang, 'gpsActive')}${userAccuracy ? ` (±${userAccuracy} m)` : ''}`
-                  : t(lang, 'gpsOff')}
+      {/* Bottom-left stack (Nearest active banner + GPS, Compass & Nearest buttons) */}
+      {(nearestTarget || !selectedItem) && (
+        <div className="pointer-events-none absolute bottom-[calc(4rem+env(safe-area-inset-bottom))] left-3 right-3 z-20 flex flex-col items-start gap-2">
+          {nearestTarget && (
+            <div className="liquid-tint-blue animate-liquid-pop pointer-events-auto flex max-w-full flex-wrap items-center gap-2 rounded-full px-3.5 py-2 text-xs font-semibold text-white">
+              <Compass className="h-4 w-4 shrink-0" />
+              <span className="tabular-nums">
+                {t(lang, 'nearestFound')}: {formatDistance(nearestTarget.totalDistanceM, lang)} ·{' '}
+                {nearestTarget.mode === 'trail'
+                  ? t(lang, 'nearestAlongTrails')
+                  : t(lang, 'nearestDirect')}{' '}
+                ({t(lang, 'estWalkTime')} {nearestTarget.estimatedMinutes} min)
               </span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setNearestTarget(null)}
+                className="liquid-interactive ml-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] hover:bg-white/30"
+              >
+                {t(lang, 'cancelNearest')}
+              </button>
+            </div>
+          )}
 
-            <button
-              type="button"
-              onClick={toggleCompass}
-              className={`liquid-interactive flex items-center gap-1.5 rounded-full px-3.5 py-2.5 text-xs font-semibold ${
-                compassEnabled
-                  ? 'liquid-tint-indigo text-white'
-                  : 'liquid-glass text-slate-800 hover:bg-white/80'
-              }`}
-              title={compassEnabled ? t(lang, 'compassOn') : t(lang, 'compassOff')}
-            >
-              <Navigation2
-                className="h-4 w-4 transition-transform"
-                style={{
-                  transform:
-                    compassEnabled && compassHeading !== null
-                      ? `rotate(${compassHeading}deg)`
-                      : undefined,
-                }}
-              />
-              <span>{compassEnabled ? t(lang, 'compassOn') : t(lang, 'compassOff')}</span>
-            </button>
-          </div>
+          {!selectedItem && (
+            <div className="pointer-events-auto flex flex-col items-start gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => startGps(true)}
+                  className={`liquid-interactive flex items-center gap-2 rounded-full px-3.5 py-2.5 text-xs font-semibold tabular-nums ${
+                    userLocation
+                      ? 'liquid-tint-blue text-white'
+                      : 'liquid-glass text-slate-800 hover:bg-white/80'
+                  }`}
+                >
+                  <LocateFixed className="h-4 w-4" />
+                  <span>
+                    {userLocation
+                      ? `${t(lang, 'gpsActive')}${userAccuracy ? ` (±${userAccuracy} m)` : ''}`
+                      : t(lang, 'gpsOff')}
+                  </span>
+                </button>
 
-          <button
-            type="button"
-            onClick={() => setShowNearestPicker((v) => !v)}
-            className="liquid-tint-emerald liquid-interactive flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white"
-          >
-            <Compass className="h-4 w-4" />
-            <span>{t(lang, 'nearestBtn')}</span>
-          </button>
+                <button
+                  type="button"
+                  onClick={toggleCompass}
+                  className={`liquid-interactive flex items-center gap-1.5 rounded-full px-3.5 py-2.5 text-xs font-semibold ${
+                    compassEnabled
+                      ? 'liquid-tint-indigo text-white'
+                      : 'liquid-glass text-slate-800 hover:bg-white/80'
+                  }`}
+                  title={compassEnabled ? t(lang, 'compassOn') : t(lang, 'compassOff')}
+                >
+                  <Navigation2
+                    className="h-4 w-4 transition-transform"
+                    style={{
+                      transform:
+                        compassEnabled && compassHeading !== null
+                          ? `rotate(${compassHeading}deg)`
+                          : undefined,
+                    }}
+                  />
+                  <span>{compassEnabled ? t(lang, 'compassOn') : t(lang, 'compassOff')}</span>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowNearestPicker((v) => !v)}
+                className="liquid-tint-emerald liquid-interactive flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white"
+              >
+                <Compass className="h-4 w-4" />
+                <span>{t(lang, 'nearestBtn')}</span>
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -525,7 +653,7 @@ export function App() {
         </div>
       )}
 
-      {/* Attribution footer (compact, 5-tap unlocks Admin PIN prompt) */}
+      {/* Attribution footer (compact, 5-tap also unlocks Admin PIN prompt) */}
       {!selectedItem && (
         <div
           onClick={() => {
@@ -542,7 +670,7 @@ export function App() {
               setShowAdminModal(true);
             }
           }}
-          className="pointer-events-auto absolute inset-x-0 bottom-1.5 z-10 mx-auto w-fit cursor-default select-none px-3 text-center text-[9px] font-medium text-slate-700/80 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]"
+          className="pointer-events-auto absolute inset-x-0 bottom-[max(0.375rem,env(safe-area-inset-bottom))] z-10 mx-auto max-w-full w-fit cursor-default select-none truncate px-3 text-center text-[9px] font-medium text-slate-700/80 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]"
         >
           {t(lang, 'attribution')}
         </div>
@@ -553,17 +681,13 @@ export function App() {
         lang={lang}
         userLocation={userLocation}
         isOnline={isOnline}
-        fieldMode={isAdmin && fieldMode}
-        trailReport={
-          selectedItem?.kind === 'trail'
-            ? trailReports[selectedItem.feature.properties.id]
-            : undefined
-        }
-        onSaveTrailReport={handleSaveTrailReport}
+        isAdmin={isAdmin}
         onEditPoi={(poi) => {
+          if (!isAdmin) return;
           setEditingPoi(poi);
           setDraftPoiCoords(null);
         }}
+        onDeletePoi={handleDeletePoi}
         onClose={() => setSelectedItem(null)}
       />
 
@@ -575,27 +699,48 @@ export function App() {
         onStatusChange={setOfflineReady}
       />
 
-      <AddPoiModal
-        coords={draftPoiCoords}
-        editingPoi={editingPoi}
-        lang={lang}
-        onClose={() => {
-          setDraftPoiCoords(null);
-          setEditingPoi(null);
-        }}
-        onSave={handleSaveCustomPoi}
-      />
+      {isAdmin && (
+        <>
+          <AddPoiModal
+            coords={draftPoiCoords}
+            editingPoi={editingPoi}
+            lang={lang}
+            onClose={() => {
+              setDraftPoiCoords(null);
+              setEditingPoi(null);
+            }}
+            onSave={handleSaveCustomPoi}
+            onDelete={handleDeletePoi}
+          />
 
-      <FieldDraftsModal
-        open={showFieldDrafts}
-        lang={lang}
-        mergedPois={mergedPois}
-        customPois={customPois}
-        trailReports={trailReports}
-        onClose={() => setShowFieldDrafts(false)}
-        onDeleteCustomPoi={handleDeleteCustomPoi}
-        onClearAll={handleClearFieldDrafts}
-      />
+          <FieldDraftsModal
+            open={showAdminManager}
+            lang={lang}
+            mergedPois={mergedAdminPois}
+            customPois={customPois}
+            deletedPoiIds={deletedPoiIds}
+            onClose={() => setShowAdminManager(false)}
+            onAddNewPoi={handleAddPoiAtGps}
+            onEditPoi={(poi) => {
+              setEditingPoi(poi);
+              setDraftPoiCoords(null);
+            }}
+            onDeletePoi={handleDeletePoi}
+            onFocusPoi={(poi) => {
+              setSelectedItem({ kind: 'poi', feature: poi });
+              setFlyToCoords([...poi.geometry.coordinates]);
+            }}
+            onPublishedSuccess={(publishedPois) => {
+              setPois(publishedPois);
+              clearAdminDrafts();
+              setCustomPois([]);
+              setDeletedPoiIds([]);
+            }}
+            onClearAll={handleClearAdminDrafts}
+            onLockAdmin={handleLockAdmin}
+          />
+        </>
+      )}
 
       <AdminPinModal
         open={showAdminModal}
@@ -603,7 +748,6 @@ export function App() {
         onClose={() => setShowAdminModal(false)}
         onUnlocked={() => {
           setIsAdmin(true);
-          setFieldMode(true);
           setShowAdminModal(false);
         }}
       />

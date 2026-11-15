@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Search, X, Globe, Mountain, WifiOff, Download, CheckCircle2, ClipboardEdit } from 'lucide-react';
+import {
+  Search,
+  X,
+  Globe,
+  Mountain,
+  WifiOff,
+  Download,
+  CheckCircle2,
+  Lock,
+  ShieldCheck,
+} from 'lucide-react';
 import { getLocalizedText, t } from '../i18n';
 import { Language, PoiFeature, TrailFeature, SelectedItem } from '../types';
 
@@ -19,9 +29,8 @@ interface SearchBarProps {
   offlineReady: boolean;
   onOpenOfflineModal: () => void;
   isAdmin: boolean;
-  fieldMode: boolean;
-  onToggleFieldMode: () => void;
-  fieldDraftCount: number;
+  onAdminButtonClick: () => void;
+  pendingAdminChangesCount: number;
 }
 
 export function SearchBar({
@@ -40,9 +49,8 @@ export function SearchBar({
   offlineReady,
   onOpenOfflineModal,
   isAdmin,
-  fieldMode,
-  onToggleFieldMode,
-  fieldDraftCount,
+  onAdminButtonClick,
+  pendingAdminChangesCount,
 }: SearchBarProps) {
   const [focused, setFocused] = useState(false);
   const [showReliefMenu, setShowReliefMenu] = useState(false);
@@ -67,7 +75,7 @@ export function SearchBar({
     : [];
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex flex-col gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <div className="pointer-events-none relative z-20 flex flex-col gap-2">
       {!isOnline && (
         <div className="liquid-tint-amber animate-liquid-pop pointer-events-auto mx-auto flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold text-white">
           <WifiOff className="h-3.5 w-3.5" />
@@ -75,7 +83,7 @@ export function SearchBar({
         </div>
       )}
 
-      <div className="pointer-events-auto flex items-center gap-2">
+      <div className="pointer-events-auto relative z-20 flex items-center gap-2">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           <input
@@ -214,28 +222,6 @@ export function SearchBar({
           )}
         </div>
 
-        {/* Field Survey Mode Button (Admin only) */}
-        {isAdmin && (
-          <button
-            type="button"
-            onClick={onToggleFieldMode}
-            aria-label={t(lang, 'fieldModeTitle')}
-            title={t(lang, 'fieldModeTitle')}
-            className={`liquid-interactive relative flex items-center justify-center rounded-full p-2.5 ${
-              fieldMode
-                ? 'liquid-tint-amber text-white'
-                : 'liquid-glass text-slate-800 hover:bg-white/80'
-            }`}
-          >
-            <ClipboardEdit className="h-4 w-4" />
-            {fieldDraftCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold tabular-nums text-white shadow-sm ring-2 ring-white/85">
-                {fieldDraftCount}
-              </span>
-            )}
-          </button>
-        )}
-
         {/* Offline Mode Button */}
         <button
           type="button"
@@ -264,6 +250,30 @@ export function SearchBar({
         >
           <Globe className="h-3.5 w-3.5 text-emerald-700" />
           <span>{lang}</span>
+        </button>
+
+        {/* Discreet Admin Lock / Manager Button */}
+        <button
+          type="button"
+          onClick={onAdminButtonClick}
+          aria-label={isAdmin ? t(lang, 'adminManagePoisBtn') : t(lang, 'adminAccessBtn')}
+          title={isAdmin ? t(lang, 'adminManagePoisBtn') : t(lang, 'adminAccessBtn')}
+          className={`liquid-interactive relative flex items-center justify-center rounded-full p-2.5 ${
+            isAdmin
+              ? 'liquid-tint-amber text-white'
+              : 'liquid-glass text-slate-500 hover:bg-white/80 hover:text-slate-800'
+          }`}
+        >
+          {isAdmin ? (
+            <ShieldCheck className="h-4 w-4" />
+          ) : (
+            <Lock className="h-3.5 w-3.5" />
+          )}
+          {isAdmin && pendingAdminChangesCount > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold tabular-nums text-white shadow-sm ring-2 ring-white/85">
+              {pendingAdminChangesCount}
+            </span>
+          )}
         </button>
       </div>
     </div>
