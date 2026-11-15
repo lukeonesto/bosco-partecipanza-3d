@@ -304,6 +304,59 @@ export function MapView({
         },
       });
 
+      map.addSource('selected-trail', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+      });
+      map.addLayer({
+        id: 'selected-trail-glow',
+        type: 'line',
+        source: 'selected-trail',
+        filter: ['==', ['geometry-type'], 'LineString'],
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': '#f59e0b',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 12, 10, 16, 18],
+          'line-opacity': 0.4,
+          'line-blur': 3,
+        },
+      });
+      map.addLayer({
+        id: 'selected-trail-casing',
+        type: 'line',
+        source: 'selected-trail',
+        filter: ['==', ['geometry-type'], 'LineString'],
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': '#ffffff',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 12, 6, 16, 10],
+          'line-opacity': 0.95,
+        },
+      });
+      map.addLayer({
+        id: 'selected-trail-line',
+        type: 'line',
+        source: 'selected-trail',
+        filter: ['==', ['geometry-type'], 'LineString'],
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': '#ea580c',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3.8, 16, 6.5],
+        },
+      });
+      map.addLayer({
+        id: 'selected-trail-endpoints',
+        type: 'circle',
+        source: 'selected-trail',
+        filter: ['==', ['geometry-type'], 'Point'],
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 4, 16, 6],
+          'circle-color': '#ffffff',
+          'circle-stroke-color': '#ea580c',
+          'circle-stroke-width': 2.5,
+        },
+      });
+
       map.addSource('nearest-guide', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] },
@@ -647,17 +700,70 @@ export function MapView({
     ]);
   }, [closedTrailIds, mapLoaded]);
 
-  // Highlight selected POI radius
+  // Highlight selected POI radius & selected trail segment
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !mapLoaded || !map.getLayer('pois-circle')) return;
-    const selectedId = selectedItem?.kind === 'poi' ? selectedItem.feature.properties.id : '';
-    map.setPaintProperty('pois-circle', 'circle-radius', [
-      'case',
-      ['==', ['get', 'id'], selectedId],
-      13,
-      ['interpolate', ['linear'], ['zoom'], 12, 5, 14, 7.5, 16, 10],
-    ]);
+    if (!map || !mapLoaded) return;
+
+    if (map.getLayer('pois-circle')) {
+      const selectedPoiId =
+        selectedItem?.kind === 'poi' ? selectedItem.feature.properties.id : '';
+      map.setPaintProperty('pois-circle', 'circle-radius', [
+        'case',
+        ['==', ['get', 'id'], selectedPoiId],
+        13,
+        ['interpolate', ['linear'], ['zoom'], 12, 5, 14, 7.5, 16, 10],
+      ]);
+    }
+
+    const selectedTrailSrc = map.getSource('selected-trail') as
+      | maplibregl.GeoJSONSource
+      | undefined;
+
+    if (selectedItem?.kind === 'trail') {
+      const trail = selectedItem.feature;
+      const coords = trail.geometry.coordinates;
+      const features: GeoJSON.Feature[] = [trail];
+
+      if (coords.length > 0) {
+        features.push({
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: coords[0] },
+          properties: { role: 'start' },
+        });
+        if (coords.length > 1) {
+          features.push({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: coords[coords.length - 1] },
+            properties: { role: 'end' },
+          });
+        }
+      }
+
+      selectedTrailSrc?.setData({
+        type: 'FeatureCollection',
+        features,
+      });
+
+      if (map.getLayer('trails-line')) {
+        map.setPaintProperty('trails-line', 'line-opacity', 0.45);
+      }
+      if (map.getLayer('trails-casing')) {
+        map.setPaintProperty('trails-casing', 'line-opacity', 0.45);
+      }
+    } else {
+      selectedTrailSrc?.setData({
+        type: 'FeatureCollection',
+        features: [],
+      });
+
+      if (map.getLayer('trails-line')) {
+        map.setPaintProperty('trails-line', 'line-opacity', 1);
+      }
+      if (map.getLayer('trails-casing')) {
+        map.setPaintProperty('trails-casing', 'line-opacity', 0.85);
+      }
+    }
   }, [selectedItem, mapLoaded]);
 
   // Fly to coordinates on request
